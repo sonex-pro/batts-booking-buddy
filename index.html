@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Batt's Booking Buddy - Windsurfing Lessons</title>
+    <meta name="description" content="Book professional windsurfing lessons with Batt's Booking Buddy.">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">Batt's Booking Buddy</div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#lessons">Lessons</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact" class="btn">Book Now</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <h1>Ride the Waves with Confidence</h1>
+            <p>Professional windsurfing lessons for all skill levels</p>
+            <a href="#contact" class="btn btn-primary">Book Your Lesson</a>
+        </div>
+    </section>
+
+    <!-- Lessons Section -->
+    <section id="lessons" class="lessons">
+        <div class="container">
+            <h2>Our Lessons</h2>
+            <div class="lesson-grid">
+                <div class="lesson-card">
+                    <h3>Beginner</h3>
+                    <p>Perfect for first-timers. Learn the basics of windsurfing in a safe environment.</p>
+                    <p class="price">$75 / hour</p>
+                </div>
+                <div class="lesson-card">
+                    <h3>Intermediate</h3>
+                    <p>Improve your technique and learn new skills with our experienced instructors.</p>
+                    <p class="price">$90 / hour</p>
+                </div>
+                <div class="lesson-card">
+                    <h3>Advanced</h3>
+                    <p>Master advanced techniques and take your windsurfing to the next level.</p>
+                    <p class="price">$110 / hour</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2>About Us</h2>
+            <p>Batt's Booking Buddy has been providing professional windsurfing instruction since 2010. Our certified instructors are passionate about sharing their love for the sport.</p>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2>Book Your Lesson</h2>
+            <form id="booking-form" class="booking-form">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="lesson">Lesson Type</label>
+                    <select id="lesson" required>
+                        <option value="">Select a lesson</option>
+                        <option value="beginner">Beginner</option>
+                        <option value="intermediate">Intermediate</option>
+                        <option value="advanced">Advanced</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="date">Preferred Date</label>
+                    <input type="date" id="date" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Book Now</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Batt's Booking Buddy. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
