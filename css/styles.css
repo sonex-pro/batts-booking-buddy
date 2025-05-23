@@ -123,6 +123,13 @@ img {
 /* Hamburger menu positioning */
 .hamburger {
     z-index: 1002; /* Ensure it's above the logo */
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0; /* Match the header's vertical padding */
+    margin: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
 }
 
 @media (max-width: 768px) {
