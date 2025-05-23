@@ -98,23 +98,100 @@ img {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: relative;
 }
 
 .logo {
     font-size: 1.5rem;
     font-weight: 700;
     color: var(--primary);
+    z-index: 1001;
+}
+
+/* Hamburger Menu */
+.hamburger {
+    display: none;
+    padding: 15px;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    z-index: 1001;
+}
+
+.hamburger-box {
+    width: 30px;
+    height: 24px;
+    display: inline-block;
+    position: relative;
+}
+
+.hamburger-inner {
+    width: 24px;
+    height: 2px;
+    background-color: var(--primary);
+    position: absolute;
+    left: 3px;
+    top: 11px;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.hamburger-inner::before,
+.hamburger-inner::after {
+    content: '';
+    width: 24px;
+    height: 2px;
+    background-color: var(--primary);
+    position: absolute;
+    left: 0;
+    transition: transform 0.2s ease;
+}
+
+.hamburger-inner::before {
+    top: -8px;
+}
+
+.hamburger-inner::after {
+    bottom: -8px;
+}
+
+/* Active state for hamburger */
+.hamburger.is-active .hamburger-inner {
+    background-color: transparent;
+}
+
+.hamburger.is-active .hamburger-inner::before {
+    transform: translateY(8px) rotate(45deg);
+}
+
+.hamburger.is-active .hamburger-inner::after {
+    transform: translateY(-8px) rotate(-45deg);
+}
+
+/* Navigation */
+.main-nav {
+    transition: all 0.3s ease;
 }
 
 .main-nav ul {
     display: flex;
+    align-items: center;
     gap: 2rem;
+    margin: 0;
+    padding: 0;
 }
 
 .main-nav a {
     font-weight: 500;
     padding: 0.5rem 0;
     position: relative;
+    transition: color 0.3s ease;
+}
+
+/* Align the Book Now button with other nav items */
+.main-nav .btn {
+    padding: 0.5rem 1rem;
+    margin-left: 0.5rem;
+    line-height: 1.5;
 }
 
 .main-nav a::after {
@@ -124,11 +201,12 @@ img {
     left: 0;
     width: 0;
     height: 2px;
-    background-color: var(--primary);
+    background: var(--primary);
     transition: width 0.3s ease;
 }
 
-.main-nav a:hover::after {
+.main-nav a:hover::after,
+.main-nav a:focus::after {
     width: 100%;
 }
 
@@ -237,6 +315,52 @@ img {
     color: var(--white);
     padding: 2rem 0;
     text-align: center;
+}
+
+/* Mobile Navigation */
+@media (max-width: 992px) {
+    .hamburger {
+        display: inline-block;
+    }
+
+    .main-nav {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 80%;
+        max-width: 300px;
+        height: 100vh;
+        background: var(--white);
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        padding: 6rem 2rem 2rem;
+        transition: left 0.3s ease;
+        z-index: 1000;
+    }
+
+    .main-nav.active {
+        left: 0;
+    }
+
+    .main-nav ul {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .main-nav a {
+        display: block;
+        padding: 0.75rem 0;
+        font-size: 1.1rem;
+    }
+
+    .main-nav a::after {
+        display: none;
+    }
+
+    .main-nav .btn {
+        display: inline-block;
+        text-align: center;
+        margin-top: 1rem;
+    }
 }
 
 /* Responsive Design */

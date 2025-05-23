@@ -1,22 +1,26 @@
 // Mobile menu toggle
 document.addEventListener('DOMContentLoaded', function() {
-    const mobileMenuToggle = document.createElement('button');
-    mobileMenuToggle.classList.add('mobile-menu-toggle');
-    mobileMenuToggle.innerHTML = `
-        <span></span>
-        <span></span>
-        <span></span>
-    `;
+    const hamburger = document.querySelector('.hamburger');
+    const nav = document.querySelector('.main-nav');
+    const navLinks = document.querySelectorAll('.nav-link');
     
-    const header = document.querySelector('.header .container');
-    const nav = document.querySelector('.main-nav ul');
-    
-    if (header && nav) {
-        header.insertBefore(mobileMenuToggle, nav);
-        
-        mobileMenuToggle.addEventListener('click', function() {
+    // Toggle mobile menu
+    if (hamburger && nav) {
+        hamburger.addEventListener('click', function() {
+            this.classList.toggle('is-active');
             nav.classList.toggle('active');
-            mobileMenuToggle.classList.toggle('active');
+            document.body.style.overflow = nav.classList.contains('active') ? 'hidden' : '';
+        });
+        
+        // Close menu when clicking on a link
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (nav.classList.contains('active')) {
+                    hamburger.classList.remove('is-active');
+                    nav.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
         });
     }
     
