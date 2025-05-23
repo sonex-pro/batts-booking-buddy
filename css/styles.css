@@ -150,7 +150,7 @@ img {
     }
     
     .hamburger {
-        position: static; /* Reset any positioning */
+        position: static; /* Reset and base styles - Updated 19:57 - Trigger new deployment */
         margin-left: auto; /* Push to the right */
         order: 2; /* Ensure it stays on the right */
     }
