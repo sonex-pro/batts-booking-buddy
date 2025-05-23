@@ -91,7 +91,7 @@ img {
     background-color: var(--white);
     box-shadow: var(--shadow);
     z-index: 1000;
-    padding: 1rem 0;
+    padding: 0.75rem 0;
 }
 
 .header .container {
@@ -99,6 +99,7 @@ img {
     justify-content: space-between;
     align-items: center;
     position: relative;
+    padding: 0 1.5rem;
 }
 
 .logo {
@@ -126,27 +127,29 @@ img {
 
 @media (max-width: 768px) {
     .header .container {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0.5rem 1rem; /* Add some padding */
+        padding: 0.5rem 1.5rem;
     }
     
     .logo {
-        max-width: 120px; /* Smaller max-width for mobile */
+        max-width: 120px;
         flex: 0 0 auto;
+        margin-right: auto; /* Push hamburger to the right */
     }
     
     .logo-img {
-        height: 35px; /* Fixed height for mobile */
+        height: 35px;
         width: auto;
         max-width: 100%;
     }
     
     .hamburger {
-        position: relative;
-        right: 0;
-        top: 0;
+        position: static; /* Reset any positioning */
+        margin-left: auto; /* Push to the right */
+        order: 2; /* Ensure it stays on the right */
+    }
+    
+    .main-nav {
+        order: 3; /* Keep nav after hamburger in the DOM order */
     }
 }
 
