@@ -117,8 +117,13 @@ img {
 }
 
 @media (max-width: 768px) {
+    .logo {
+        max-width: 180px; /* Limit the maximum width on mobile */
+    }
     .logo-img {
-        height: 35px; /* Slightly smaller on mobile */
+        height: auto;
+        width: 100%;
+        max-width: 180px; /* Ensure it doesn't exceed container */
     }
 }
 
