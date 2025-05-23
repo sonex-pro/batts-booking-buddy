@@ -103,11 +103,14 @@ img {
 
 .logo {
     z-index: 1001;
+    display: flex;
+    align-items: center;
 }
 
 .logo-img {
-    height: 40px; /* Adjust based on your logo's aspect ratio */
+    height: 40px; /* Fixed height for desktop */
     width: auto;
+    max-width: 150px; /* Prevent logo from getting too wide */
     display: block;
     transition: opacity 0.3s ease;
 }
@@ -116,14 +119,34 @@ img {
     opacity: 0.9;
 }
 
+/* Hamburger menu positioning */
+.hamburger {
+    z-index: 1002; /* Ensure it's above the logo */
+}
+
 @media (max-width: 768px) {
-    .logo {
-        max-width: 180px; /* Limit the maximum width on mobile */
+    .header .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 1rem; /* Add some padding */
     }
+    
+    .logo {
+        max-width: 120px; /* Smaller max-width for mobile */
+        flex: 0 0 auto;
+    }
+    
     .logo-img {
-        height: auto;
-        width: 100%;
-        max-width: 180px; /* Ensure it doesn't exceed container */
+        height: 35px; /* Fixed height for mobile */
+        width: auto;
+        max-width: 100%;
+    }
+    
+    .hamburger {
+        position: relative;
+        right: 0;
+        top: 0;
     }
 }
 
