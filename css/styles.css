@@ -217,8 +217,18 @@ img {
 
 /* Mobile styles */
 @media (max-width: 992px) {
+    .header .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
     .menu-toggle {
         display: block;
+        position: absolute;
+        right: 1.5rem;
+        top: 50%;
+        transform: translateY(-50%);
     }
     
     .nav {
