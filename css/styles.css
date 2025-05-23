@@ -100,6 +100,7 @@ img {
     align-items: center;
     position: relative;
     padding: 0 1.5rem;
+    height: 100%;
 }
 
 .logo {
@@ -135,24 +136,31 @@ img {
 @media (max-width: 768px) {
     .header .container {
         padding: 0.5rem 1.5rem;
+        min-height: 60px; /* Ensure consistent header height */
     }
     
     .logo {
         max-width: 120px;
         flex: 0 0 auto;
-        margin-right: auto; /* Push hamburger to the right */
+        height: 100%;
+        display: flex;
+        align-items: center;
     }
     
     .logo-img {
         height: 35px;
         width: auto;
         max-width: 100%;
+        display: block;
     }
     
     .hamburger {
-        position: static; /* Reset and base styles - Updated 19:57 - Trigger new deployment */
-        margin-left: auto; /* Push to the right */
-        order: 2; /* Ensure it stays on the right */
+        position: relative;
+        top: 0;
+        right: 0;
+        margin: 0;
+        padding: 10px;
+        order: 2;
     }
     
     .main-nav {
