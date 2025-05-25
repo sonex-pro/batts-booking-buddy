@@ -90,6 +90,26 @@
             // Display booking summary
             displayBookingSummary();
             
+            // Add event listeners to navigation links to clear localStorage data
+            const homeLinks = document.querySelectorAll('a[href^="index.html"]');
+            homeLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    // Clear all booking data from localStorage
+                    localStorage.clear();
+                    sessionStorage.clear();
+                });
+            });
+            
+            // Also add event listener to the logo link
+            const logoLink = document.querySelector('.logo a');
+            if (logoLink) {
+                logoLink.addEventListener('click', function(e) {
+                    // Clear all booking data from localStorage
+                    localStorage.clear();
+                    sessionStorage.clear();
+                });
+            }
+            
             // Handle discount code application
             const applyDiscountBtn = document.getElementById('apply-discount');
             const discountCodeInput = document.getElementById('discount-code');
