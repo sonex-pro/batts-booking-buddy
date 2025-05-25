@@ -31,6 +31,216 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
+    // Populate month dropdowns with current month + next 2 months
+    const monthSelects = document.querySelectorAll('.month-select');
+    if (monthSelects.length > 0) {
+        populateMonthOptions(monthSelects);
+        
+        // Add event listeners to month selects
+        monthSelects.forEach(select => {
+            select.addEventListener('change', function() {
+                const selectedMonth = this.value;
+                const price = this.getAttribute('data-price');
+                const plan = this.getAttribute('data-plan');
+                
+                if (selectedMonth) {
+                    // Disable other dropdowns
+                    monthSelects.forEach(otherSelect => {
+                        if (otherSelect !== this) {
+                            otherSelect.disabled = true;
+                            otherSelect.parentElement.classList.add('disabled');
+                        }
+                    });
+                    
+                    // Disable show calendar button if exists
+                    const calendarBtn = document.getElementById('show-calendar-btn');
+                    if (calendarBtn) {
+                        calendarBtn.disabled = true;
+                        calendarBtn.classList.add('disabled');
+                    }
+                    
+                    // Save booking data to localStorage
+                    saveBookingData(selectedMonth, price, plan);
+                    
+                    // Enable the next button
+                    const nextButton = document.getElementById('next-button');
+                    if (nextButton) {
+                        nextButton.classList.add('active');
+                    }
+                } else {
+                    // If no option is selected, enable all dropdowns
+                    monthSelects.forEach(otherSelect => {
+                        otherSelect.disabled = false;
+                        otherSelect.parentElement.classList.remove('disabled');
+                    });
+                    
+                    // Enable show calendar button if exists
+                    const calendarBtn = document.getElementById('show-calendar-btn');
+                    if (calendarBtn) {
+                        calendarBtn.disabled = false;
+                        calendarBtn.classList.remove('disabled');
+                    }
+                }
+            });
+        });
+    }
+    
+    // Handle Show Calendar button
+    const showCalendarBtn = document.getElementById('show-calendar-btn');
+    if (showCalendarBtn) {
+        const calendarWrapper = document.getElementById('calendar-wrapper');
+        const customCalendar = document.querySelector('.custom-calendar');
+        
+        if (customCalendar) {
+            // Initialize calendar when button is clicked
+            showCalendarBtn.addEventListener('click', function() {
+                if (calendarWrapper) {
+                    calendarWrapper.classList.toggle('hidden');
+                    
+                    // If showing calendar, disable month dropdowns and initialize calendar
+                    if (!calendarWrapper.classList.contains('hidden')) {
+                        const monthSelects = document.querySelectorAll('.month-select');
+                        monthSelects.forEach(select => {
+                            select.disabled = true;
+                            select.parentElement.classList.add('disabled');
+                        });
+                        
+                        // Initialize calendar if not already initialized
+                        initCalendar(customCalendar, showCalendarBtn.getAttribute('data-price'), showCalendarBtn.getAttribute('data-plan'));
+                    }
+                }
+            });
+        }
+    }
+    
+    // Function to initialize the custom calendar
+    function initCalendar(calendarElement, price, plan) {
+        const currentMonthElement = calendarElement.querySelector('.current-month');
+        const daysContainer = calendarElement.querySelector('.days');
+        const prevMonthBtn = calendarElement.querySelector('.prev-month');
+        const nextMonthBtn = calendarElement.querySelector('.next-month');
+        const selectedDateDisplay = calendarElement.querySelector('.selected-date-display');
+        
+        // Get current date
+        let currentDate = new Date();
+        let currentMonth = currentDate.getMonth();
+        let currentYear = currentDate.getFullYear();
+        
+        // Initialize calendar
+        renderCalendar();
+        
+        // Event listeners for month navigation
+        prevMonthBtn.addEventListener('click', function() {
+            // Don't allow going to past months
+            const today = new Date();
+            const prevMonth = new Date(currentYear, currentMonth - 1, 1);
+            
+            if (prevMonth.getMonth() >= today.getMonth() || prevMonth.getFullYear() > today.getFullYear()) {
+                currentMonth--;
+                if (currentMonth < 0) {
+                    currentMonth = 11;
+                    currentYear--;
+                }
+                renderCalendar();
+            }
+        });
+        
+        nextMonthBtn.addEventListener('click', function() {
+            // Only allow navigating to the next month
+            const maxDate = new Date();
+            maxDate.setMonth(maxDate.getMonth() + 1);
+            
+            const nextMonth = new Date(currentYear, currentMonth + 1, 1);
+            if (nextMonth <= maxDate) {
+                currentMonth++;
+                if (currentMonth > 11) {
+                    currentMonth = 0;
+                    currentYear++;
+                }
+                renderCalendar();
+            }
+        });
+        
+        // Function to render the calendar
+        function renderCalendar() {
+            // Update current month display
+            const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            currentMonthElement.textContent = `${months[currentMonth]} ${currentYear}`;
+            
+            // Clear previous days
+            daysContainer.innerHTML = '';
+            
+            // Get first day of month and total days in month
+            const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            
+            // Add empty cells for days before first day of month
+            for (let i = 0; i < firstDay; i++) {
+                const emptyDay = document.createElement('div');
+                daysContainer.appendChild(emptyDay);
+            }
+            
+            // Add days of the month
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayElement = document.createElement('div');
+                dayElement.textContent = day;
+                
+                // Create date object for this day
+                const date = new Date(currentYear, currentMonth, day);
+                
+                // Check if date is in the past
+                if (date < today) {
+                    dayElement.classList.add('disabled');
+                } else {
+                    // Check if day is Monday (1), Wednesday (3), or Friday (5)
+                    const dayOfWeek = date.getDay();
+                    if (dayOfWeek === 1 || dayOfWeek === 3 || dayOfWeek === 5) {
+                        dayElement.classList.add('available');
+                        
+                        // Add click event to selectable days
+                        dayElement.addEventListener('click', function() {
+                            // Remove selected class from all days
+                            document.querySelectorAll('.days div').forEach(day => {
+                                day.classList.remove('selected');
+                            });
+                            
+                            // Add selected class to clicked day
+                            this.classList.add('selected');
+                            
+                            // Format date for display
+                            const selectedDate = new Date(currentYear, currentMonth, day);
+                            const formattedDate = selectedDate.toLocaleDateString('en-GB', {
+                                weekday: 'long',
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric'
+                            });
+                            
+                            // Update selected date display
+                            selectedDateDisplay.textContent = `Selected: ${formattedDate}`;
+                            
+                            // Save session data
+                            saveSessionData(selectedDate.toISOString().split('T')[0], price, plan);
+                            
+                            // Enable the next button
+                            const nextButton = document.getElementById('next-button');
+                            if (nextButton) {
+                                nextButton.classList.add('active');
+                            }
+                        });
+                    } else {
+                        dayElement.classList.add('disabled');
+                    }
+                }
+                
+                daysContainer.appendChild(dayElement);
+            }
+        }
+    }
+    
     // Smooth scrolling for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
@@ -86,7 +296,150 @@ document.addEventListener('DOMContentLoaded', function() {
         const today = new Date().toISOString().split('T')[0];
         dateInput.setAttribute('min', today);
     }
+    
+    // Handle details form
+    const detailsForm = document.getElementById('details-form');
+    if (detailsForm) {
+        // Display booking summary if available
+        displayBookingSummary();
+        
+        detailsForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const yourName = document.getElementById('your-name').value;
+            const playerName = document.getElementById('player-name').value;
+            
+            // Save user details to localStorage
+            saveUserDetails(yourName, playerName);
+            
+            // Show confirmation
+            alert('Thank you for your booking! Your details have been saved.');
+            
+            // You could redirect to a confirmation page here
+            // window.location.href = 'confirmation.html';
+        });
+    }
 });
+
+// Function to populate month options
+function populateMonthOptions(selectElements) {
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth();
+    const currentYear = currentDate.getFullYear();
+    
+    // Create options for current month and next 2 months
+    selectElements.forEach(select => {
+        // Clear existing options except the first one
+        while (select.options.length > 1) {
+            select.remove(1);
+        }
+        
+        // Add options for current month and next 2 months
+        for (let i = 0; i < 3; i++) {
+            const monthIndex = (currentMonth + i) % 12;
+            const year = currentYear + Math.floor((currentMonth + i) / 12);
+            const option = document.createElement('option');
+            option.value = `${months[monthIndex]} ${year}`;
+            option.textContent = `${months[monthIndex]} ${year}`;
+            select.appendChild(option);
+        }
+    });
+}
+
+// Function to save booking data to localStorage
+function saveBookingData(month, price, plan) {
+    const bookingData = {
+        month: month,
+        price: price,
+        plan: plan,
+        skillLevel: getSkillLevelFromPage(),
+        bookingType: 'monthly'
+    };
+    
+    localStorage.setItem('bookingData', JSON.stringify(bookingData));
+}
+
+// Function to save session data to localStorage
+function saveSessionData(date, price, plan) {
+    // Convert date string to Date object
+    const selectedDate = new Date(date);
+    
+    // Format date for display
+    const formattedDate = selectedDate.toLocaleDateString('en-GB', { 
+        weekday: 'long',
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+    });
+    
+    const bookingData = {
+        date: formattedDate,
+        price: price,
+        plan: plan,
+        skillLevel: getSkillLevelFromPage(),
+        bookingType: 'single'
+    };
+    
+    localStorage.setItem('bookingData', JSON.stringify(bookingData));
+    return true;
+}
+
+// Function to save user details to localStorage
+function saveUserDetails(yourName, playerName) {
+    const userDetails = {
+        yourName: yourName,
+        playerName: playerName
+    };
+    
+    localStorage.setItem('userDetails', JSON.stringify(userDetails));
+}
+
+// Function to display booking summary
+function displayBookingSummary() {
+    const bookingDetailsElement = document.getElementById('booking-details');
+    if (!bookingDetailsElement) return;
+    
+    const bookingData = JSON.parse(localStorage.getItem('bookingData'));
+    
+    if (bookingData) {
+        let summaryHTML = `
+            <p><strong>Skill Level:</strong> ${bookingData.skillLevel}</p>
+            <p><strong>Plan:</strong> ${bookingData.plan}</p>`;
+            
+        // Display different information based on booking type
+        if (bookingData.bookingType === 'monthly') {
+            summaryHTML += `
+            <p><strong>Month:</strong> ${bookingData.month}</p>
+            <p><strong>Price:</strong> £${bookingData.price}/month</p>
+            `;
+        } else if (bookingData.bookingType === 'single') {
+            summaryHTML += `
+            <p><strong>Date:</strong> ${bookingData.date}</p>
+            <p><strong>Price:</strong> £${bookingData.price}</p>
+            `;
+        }
+        
+        bookingDetailsElement.innerHTML = summaryHTML;
+    } else {
+        bookingDetailsElement.innerHTML = '<p>No booking information found. Please go back and select a booking option.</p>';
+    }
+}
+
+// Function to get skill level from current page
+function getSkillLevelFromPage() {
+    const path = window.location.pathname;
+    if (path.includes('beginner')) {
+        return 'Beginner';
+    } else if (path.includes('intermediate')) {
+        return 'Intermediate';
+    } else if (path.includes('advanced')) {
+        return 'Advanced';
+    } else {
+        return 'Unknown';
+    }
+}
 
 // Add active class to nav links on scroll
 window.addEventListener('scroll', function() {

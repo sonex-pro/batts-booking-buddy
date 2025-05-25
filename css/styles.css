@@ -624,6 +624,168 @@ img {
     font-size: 1rem;
 }
 
+/* Month selection and Next button */
+.month-select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    background-color: #fff;
+}
+
+.month-select:disabled {
+    background-color: #f5f5f5;
+    color: #999;
+    cursor: not-allowed;
+}
+
+.form-group.disabled label {
+    color: #999;
+}
+
+/* Calendar styles */
+.calendar-container {
+    margin-top: 1rem;
+}
+
+#show-calendar-btn {
+    padding: 8px 2rem;
+}
+
+.calendar-wrapper {
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+
+.calendar-wrapper.hidden {
+    display: none;
+}
+
+/* Custom Calendar */
+.custom-calendar {
+    width: 100%;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #f5f5f5;
+    border-radius: 4px 4px 0 0;
+}
+
+.calendar-header button {
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 5px 10px;
+}
+
+.current-month {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    font-weight: bold;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-gap: 5px;
+    padding: 10px;
+}
+
+.days div {
+    text-align: center;
+    padding: 8px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+/* Style for days that are not Monday, Wednesday, or Friday */
+.days div.disabled {
+    color: #ccc;
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+/* Style for Monday, Wednesday, Friday */
+.days div.available {
+    font-weight: bold;
+    color: #000;
+}
+
+.days div.available:hover {
+    background-color: #f0f0f0;
+}
+
+.days div.selected {
+    background-color: #181818;
+    color: white;
+}
+
+.selected-date-display {
+    margin-top: 10px;
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
+    border-top: 1px solid #eee;
+}
+
+.next-button-container {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.next-button {
+    padding: 3px 2rem;
+    font-size: 1rem;
+    font-weight: 500;
+    background-color: #181818;
+    color: #fff;
+}
+
+.next-button:hover {
+    background-color: #222;
+}
+
+/* Booking Summary */
+.booking-summary {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+
+.booking-summary h3 {
+    color: #0e43ca;
+    margin-bottom: 1rem;
+}
+
+.booking-form-container {
+    max-width: 800px;
+    margin: 2rem auto;
+}
+
 /* Footer */
 .footer {
     background-color: var(--dark);
