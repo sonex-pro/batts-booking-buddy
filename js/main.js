@@ -470,6 +470,11 @@ function displayBookingSummary() {
         }
         
         // Update booking details section
+        const groupSelectedElement = document.getElementById('group-selected-display');
+        if (groupSelectedElement && bookingData.skillLevel) {
+            groupSelectedElement.textContent = `Group Selected: ${bookingData.skillLevel}`;
+        }
+        
         document.getElementById('booking-type').textContent = `Booking Type: ${bookingType}`;
         
         // Set original price - ensure it's a valid number
