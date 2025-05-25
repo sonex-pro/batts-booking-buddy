@@ -74,37 +74,37 @@ img {
 /* Buttons */
 .btn {
     display: inline-block;
-    padding: 0.8rem 1.5rem;
+    padding: 3px 2rem;
     border: none;
     border-radius: 4px;
     font-size: 1rem;
     font-weight: 500;
     text-align: center;
+    text-decoration: none;
+    background-color: #181818;
+    color: #fff;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: background 0.3s, color 0.3s;
 }
 
 .btn-primary {
-    background-color: var(--primary);
-    color: var(--white);
+    background-color: #181818;
+    color: #fff;
 }
 
-.btn-primary:hover {
-    background-color: var(--primary-dark);
-    transform: translateY(-2px);
+.btn-primary:hover, .btn-primary:focus {
+    background-color: #222;
 }
 
 .btn-black {
-    background-color: #111;
+    background-color: #181818;
     color: #fff;
-    border: none;
-    margin-top: 1.5rem;
     padding: 3px 1.5rem;
     box-shadow: 0 2px 6px rgba(0,0,0,0.12);
 }
 
-.btn-black:hover,
-.btn-black:focus {
+.btn-black:hover, .btn-black:focus {
+    background-color: #222;
     background-color: #000;
     color: #fff;
     transform: translateY(-2px);
@@ -311,7 +311,7 @@ img {
 .hero {
     padding-top: 100px; /* 80px logo + 20px gap */
     padding-bottom: 4rem;
-    background: #007bff;
+    background:#0e43ca;
     color: var(--white);
     text-align: center;
 }
@@ -342,7 +342,7 @@ img {
 }
 
 .lesson-card {
-    background: var(--white);
+    background-color: #e6f0ff; /* Pale light blue background */
     border-radius: 8px;
     padding: 2rem;
     box-shadow: var(--shadow);
@@ -354,8 +354,9 @@ img {
 }
 
 .lesson-card h3 {
-    color: #007bff;  /* Bright blue color */
+    color: #0e43ca;  /* Bright blue color */
     margin-bottom: 1rem;
+    font-size: 1.2rem;
 }
 
 .lesson-card .price {
@@ -363,6 +364,76 @@ img {
     font-weight: 700;
     color: var(--primary);
     margin-top: 1rem;
+}
+
+/* Lesson Detail Page */
+.lesson-detail {
+    padding: 6rem 0;
+    background-color: var(--light);
+}
+
+.lesson-detail h1 {
+    color: #0e43ca;
+    margin-bottom: 1.5rem;
+    padding-top: 10px;
+}
+
+.booking-options {
+    margin-top: 3rem;
+}
+
+.booking-options h2 {
+    color: #000;
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+}
+
+.booking-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.booking-card {
+    background-color: #e6f0ff; /* Pale light blue background */
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    transition: transform 0.3s ease;
+}
+
+.booking-card:hover {
+    transform: translateY(-5px);
+}
+
+.booking-card h3 {
+    color: #0e43ca;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.booking-card p {
+    margin-bottom: 1rem;
+}
+
+.booking-card .price {
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 1.5rem;
+}
+
+.booking-card .btn {
+    display: inline-block;
+    margin-top: 1rem;
+}
+
+.note {
+    margin-top: 2rem;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-left: 4px solid #0e43ca;
+    font-style: italic;
 }
 
 /* About Section */
