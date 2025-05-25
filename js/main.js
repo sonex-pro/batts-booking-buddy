@@ -66,6 +66,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     const nextButton = document.getElementById('next-button');
                     if (nextButton) {
                         nextButton.classList.add('active');
+                        nextButton.classList.remove('disabled');
+                        nextButton.setAttribute('aria-disabled', 'false');
                     }
                 } else {
                     // If no option is selected, enable all dropdowns
@@ -79,6 +81,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (calendarBtn) {
                         calendarBtn.disabled = false;
                         calendarBtn.classList.remove('disabled');
+                    }
+                    // Disable the next button
+                    const nextButton = document.getElementById('next-button');
+                    if (nextButton) {
+                        nextButton.classList.remove('active');
+                        nextButton.classList.add('disabled');
+                        nextButton.setAttribute('aria-disabled', 'true');
                     }
                 }
             });
@@ -239,6 +248,8 @@ document.addEventListener('DOMContentLoaded', function() {
                             const nextButton = document.getElementById('next-button');
                             if (nextButton) {
                                 nextButton.classList.add('active');
+                                nextButton.classList.remove('disabled');
+                                nextButton.setAttribute('aria-disabled', 'false');
                             }
                         });
                     } else {
