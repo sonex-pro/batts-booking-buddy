@@ -37,14 +37,16 @@
             <div class="container">
                 <h1>Your Details</h1>
                 <div class="booking-form-container">
-                    <form id="details-form" class="booking-form">
+                    <form id="details-form" class="booking-form" novalidate>
                         <div class="form-group">
                             <label for="your-name">Your Name</label>
-                            <input type="text" id="your-name" name="your-name" placeholder="Enter your full name" required>
+                            <input type="text" id="your-name" name="your-name" placeholder="Enter your full name">
+                            <div class="error-message" id="your-name-error" style="display: none; color: #ff0000; font-size: 0.8rem; margin-top: 0.25rem;">Please enter your name</div>
                         </div>
                         <div class="form-group">
                             <label for="player-name">Player's Name</label>
-                            <input type="text" id="player-name" name="player-name" placeholder="Enter player's name" required>
+                            <input type="text" id="player-name" name="player-name" placeholder="Enter player's name">
+                            <div class="error-message" id="player-name-error" style="display: none; color: #ff0000; font-size: 0.8rem; margin-top: 0.25rem;">Please enter player's name</div>
                         </div>
                         <div class="form-actions">
                             <button type="submit" class="btn btn-primary next-button">Next</button>
@@ -60,5 +62,58 @@
         </div>
     </footer>
     <script src="js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const detailsForm = document.getElementById('details-form');
+            const yourNameInput = document.getElementById('your-name');
+            const playerNameInput = document.getElementById('player-name');
+            const yourNameError = document.getElementById('your-name-error');
+            const playerNameError = document.getElementById('player-name-error');
+            
+            if (detailsForm) {
+                detailsForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // Reset error messages
+                    yourNameError.style.display = 'none';
+                    playerNameError.style.display = 'none';
+                    
+                    const yourName = yourNameInput.value.trim();
+                    const playerName = playerNameInput.value.trim();
+                    
+                    let isValid = true;
+                    
+                    // Validate your name
+                    if (!yourName) {
+                        yourNameError.style.display = 'block';
+                        isValid = false;
+                    }
+                    
+                    // Validate player name
+                    if (!playerName) {
+                        playerNameError.style.display = 'block';
+                        isValid = false;
+                    }
+                    
+                    if (isValid) {
+                        // Save user details to localStorage
+                        saveUserDetails(yourName, playerName);
+                        
+                        // Redirect to booking summary page
+                        window.location.href = 'booking-summary.html';
+                    }
+                });
+                
+                // Clear error messages when user starts typing
+                yourNameInput.addEventListener('input', function() {
+                    yourNameError.style.display = 'none';
+                });
+                
+                playerNameInput.addEventListener('input', function() {
+                    playerNameError.style.display = 'none';
+                });
+            }
+        });
+    </script>
 </body>
 </html>

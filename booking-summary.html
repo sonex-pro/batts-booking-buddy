@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Summary | Batt's Booking Buddy</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <a href="index.html#home">
+                    <img src="images/logo.webp" alt="Batt's Booking Buddy Logo" class="logo-img">
+                </a>
+            </div>
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="index.html#home" class="nav-link">Home</a></li>
+                    <li class="nav-item"><a href="index.html#about" class="nav-link">About</a></li>
+                    <li class="nav-item"><a href="index.html#contact" class="nav-link">Contact</a></li>
+                </ul>
+            </nav>
+            <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+    <main>
+        <section class="lesson-detail">
+            <div class="container">
+                <h1>Booking Summary</h1>
+                <div class="booking-form-container">
+                    <div class="booking-summary">
+                        <h3>Your Booking</h3>
+                        <div id="booking-details">
+                            <h4>Booking Details</h4>
+                            <p id="booking-type">Booking Type: Loading...</p>
+                        </div>
+                        
+                        <div id="personal-details">
+                            <h4>Personal Details</h4>
+                            <p id="your-name-display">Your Name: Loading...</p>
+                            <p id="player-name-display">Player's Name: Loading...</p>
+                        </div>
+                        
+                        <div id="discount-section">
+                            <h4>Discount Code</h4>
+                            <div class="form-group">
+                                <input type="text" id="discount-code" placeholder="Enter code: SIB for sibling discount">
+                                <button id="apply-discount" class="btn btn-primary">Apply</button>
+                            </div>
+                            <p id="original-price">Original Price: £<span id="original-price-value">0.00</span></p>
+                            <p id="discount-amount" style="display: none;">Discount: £<span id="discount-amount-value">0.00</span></p>
+                            <p id="total-price"><strong>Total: £<span id="total-price-value">0.00</span></strong></p>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button id="back-home-btn" class="btn btn-primary">Back to Home</button>
+                            <button id="checkout-btn" class="btn btn-primary">Checkout</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 cbj-uk-design. All rights reserved.</p>
+        </div>
+    </footer>
+    <script src="js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Clear any existing data when first loading the page
+            // This ensures we don't show stale data from previous sessions
+            if (!sessionStorage.getItem('summaryPageVisited')) {
+                localStorage.removeItem('discountCode');
+                localStorage.removeItem('discountAmount');
+                localStorage.removeItem('totalPrice');
+                sessionStorage.setItem('summaryPageVisited', 'true');
+            }
+            
+            // Display booking summary
+            displayBookingSummary();
+            
+            // Handle discount code application
+            const applyDiscountBtn = document.getElementById('apply-discount');
+            const discountCodeInput = document.getElementById('discount-code');
+            const originalPriceValue = document.getElementById('original-price-value');
+            const discountAmountElement = document.getElementById('discount-amount');
+            const discountAmountValue = document.getElementById('discount-amount-value');
+            const totalPriceValue = document.getElementById('total-price-value');
+            
+            applyDiscountBtn.addEventListener('click', function() {
+                const discountCode = discountCodeInput.value.trim().toUpperCase();
+                const originalPrice = parseFloat(originalPriceValue.textContent);
+                
+                if (isNaN(originalPrice)) {
+                    alert('Error: Invalid price value');
+                    return;
+                }
+                
+                if (discountCode === 'SIB') {
+                    // Apply 50% sibling discount
+                    const discountAmount = originalPrice * 0.5;
+                    const discountedPrice = originalPrice - discountAmount;
+                    
+                    // Display discount amount
+                    discountAmountElement.style.display = 'block';
+                    discountAmountValue.textContent = discountAmount.toFixed(2);
+                    totalPriceValue.textContent = discountedPrice.toFixed(2);
+                    
+                    // Save discount to localStorage
+                    localStorage.setItem('discountCode', discountCode);
+                    localStorage.setItem('discountAmount', discountAmount.toFixed(2));
+                    localStorage.setItem('totalPrice', discountedPrice.toFixed(2));
+                } else if (discountCode === '') {
+                    // Reset to original price if discount code is cleared
+                    discountAmountElement.style.display = 'none';
+                    totalPriceValue.textContent = originalPrice.toFixed(2);
+                    
+                    // Remove discount from localStorage
+                    localStorage.removeItem('discountCode');
+                    localStorage.removeItem('discountAmount');
+                    localStorage.setItem('totalPrice', originalPrice.toFixed(2));
+                } else {
+                    // Invalid discount code
+                    alert('Invalid discount code');
+                    discountAmountElement.style.display = 'none';
+                    totalPriceValue.textContent = originalPrice.toFixed(2);
+                    
+                    // Remove discount from localStorage
+                    localStorage.removeItem('discountCode');
+                    localStorage.removeItem('discountAmount');
+                    localStorage.setItem('totalPrice', originalPrice.toFixed(2));
+                }
+            });
+            
+            // Handle back to home button
+            const backHomeBtn = document.getElementById('back-home-btn');
+            backHomeBtn.addEventListener('click', function() {
+                // Clear all booking data from localStorage
+                localStorage.clear(); // Clear everything to ensure no data remains
+                sessionStorage.clear(); // Also clear session storage
+                
+                // Navigate back to home page
+                window.location.href = 'index.html';
+            });
+            
+            // Handle checkout button
+            const checkoutBtn = document.getElementById('checkout-btn');
+            checkoutBtn.addEventListener('click', function() {
+                alert('Checkout functionality will be implemented in the future.');
+            });
+        });
+    </script>
+</body>
+</html>

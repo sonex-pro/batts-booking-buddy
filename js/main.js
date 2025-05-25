@@ -328,17 +328,36 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             
             // Get form data
-            const yourName = document.getElementById('your-name').value;
-            const playerName = document.getElementById('player-name').value;
+            const yourName = document.getElementById('your-name').value.trim();
+            const playerName = document.getElementById('player-name').value.trim();
+            const yourNameError = document.getElementById('your-name-error');
+            const playerNameError = document.getElementById('player-name-error');
             
-            // Save user details to localStorage
-            saveUserDetails(yourName, playerName);
+            // Reset error messages if they exist
+            if (yourNameError) yourNameError.style.display = 'none';
+            if (playerNameError) playerNameError.style.display = 'none';
             
-            // Show confirmation
-            alert('Thank you for your booking! Your details have been saved.');
+            // Validate inputs
+            let isValid = true;
             
-            // You could redirect to a confirmation page here
-            // window.location.href = 'confirmation.html';
+            if (!yourName) {
+                isValid = false;
+                if (yourNameError) yourNameError.style.display = 'block';
+            }
+            
+            if (!playerName) {
+                isValid = false;
+                if (playerNameError) playerNameError.style.display = 'block';
+            }
+            
+            // Only proceed if validation passes
+            if (isValid) {
+                // Save user details to localStorage
+                saveUserDetails(yourName, playerName);
+                
+                // Redirect to the booking summary page
+                window.location.href = 'booking-summary.html';
+            }
         });
     }
 });
@@ -419,32 +438,94 @@ function saveUserDetails(yourName, playerName) {
 
 // Function to display booking summary
 function displayBookingSummary() {
+    // Get elements
     const bookingDetailsElement = document.getElementById('booking-details');
+    const yourNameElement = document.getElementById('your-name-display');
+    const playerNameElement = document.getElementById('player-name-display');
+    const originalPriceElement = document.getElementById('original-price-value');
+    const totalPriceElement = document.getElementById('total-price-value');
+    const discountAmountElement = document.getElementById('discount-amount');
+    const discountAmountValue = document.getElementById('discount-amount-value');
+    const discountCodeInput = document.getElementById('discount-code');
+    
+    // Return if we're not on the booking summary page
     if (!bookingDetailsElement) return;
     
+    // Get data from localStorage
     const bookingData = JSON.parse(localStorage.getItem('bookingData'));
+    const userDetails = JSON.parse(localStorage.getItem('userDetails'));
+    const discountCode = localStorage.getItem('discountCode');
+    const discountAmount = localStorage.getItem('discountAmount');
+    const totalPrice = localStorage.getItem('totalPrice');
     
+    // Display booking details
     if (bookingData) {
-        let summaryHTML = `
-            <p><strong>Skill Level:</strong> ${bookingData.skillLevel}</p>
-            <p><strong>Plan:</strong> ${bookingData.plan}</p>`;
-            
+        let bookingType = '';
+        
         // Display different information based on booking type
         if (bookingData.bookingType === 'monthly') {
-            summaryHTML += `
-            <p><strong>Month:</strong> ${bookingData.month}</p>
-            <p><strong>Price:</strong> £${bookingData.price}/month</p>
-            `;
+            bookingType = `Monthly booking (${bookingData.plan}) for ${bookingData.month}`;
         } else if (bookingData.bookingType === 'single') {
-            summaryHTML += `
-            <p><strong>Date:</strong> ${bookingData.date}</p>
-            <p><strong>Price:</strong> £${bookingData.price}</p>
-            `;
+            bookingType = `Single session (${bookingData.plan}) on ${bookingData.date}`;
         }
         
-        bookingDetailsElement.innerHTML = summaryHTML;
+        // Update booking details section
+        document.getElementById('booking-type').textContent = `Booking Type: ${bookingType}`;
+        
+        // Set original price - ensure it's a valid number
+        if (originalPriceElement) {
+            const price = parseFloat(bookingData.price);
+            originalPriceElement.textContent = price.toFixed(2);
+            
+            // If no discount has been applied yet, set the total price to the original price
+            if (!totalPrice && totalPriceElement) {
+                totalPriceElement.textContent = price.toFixed(2);
+            }
+        }
+        
+        // Set total price if it exists in localStorage
+        if (totalPrice && totalPriceElement) {
+            totalPriceElement.textContent = parseFloat(totalPrice).toFixed(2);
+        }
+        
+        // Display discount if applied
+        if (discountCode && discountCode === 'SIB' && discountAmountElement && discountAmountValue) {
+            discountAmountElement.style.display = 'block';
+            discountAmountValue.textContent = parseFloat(discountAmount).toFixed(2);
+            if (discountCodeInput) {
+                discountCodeInput.value = discountCode;
+            }
+        } else {
+            // Hide discount section if no discount is applied
+            if (discountAmountElement) {
+                discountAmountElement.style.display = 'none';
+            }
+        }
     } else {
+        // No booking data found
         bookingDetailsElement.innerHTML = '<p>No booking information found. Please go back and select a booking option.</p>';
+        
+        // Clear any discount or price data that might be lingering
+        if (originalPriceElement) originalPriceElement.textContent = '0.00';
+        if (totalPriceElement) totalPriceElement.textContent = '0.00';
+        if (discountAmountElement) discountAmountElement.style.display = 'none';
+    }
+    
+    // Display user details
+    if (userDetails) {
+        if (yourNameElement) {
+            yourNameElement.textContent = `Your Name: ${userDetails.yourName}`;
+        }
+        if (playerNameElement) {
+            playerNameElement.textContent = `Player's Name: ${userDetails.playerName}`;
+        }
+    } else {
+        if (yourNameElement) {
+            yourNameElement.textContent = 'Your Name: Not provided';
+        }
+        if (playerNameElement) {
+            playerNameElement.textContent = "Player's Name: Not provided";
+        }
     }
 }
 
