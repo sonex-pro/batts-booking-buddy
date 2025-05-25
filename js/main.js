@@ -85,6 +85,16 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
+    // Prevent navigation on Next button unless enabled
+    const nextButton = document.getElementById('next-button');
+    if (nextButton) {
+        nextButton.addEventListener('click', function(e) {
+            if (nextButton.classList.contains('disabled') || nextButton.getAttribute('aria-disabled') === 'true') {
+                e.preventDefault();
+            }
+        });
+    }
+
     // Handle Show Calendar button
     const showCalendarBtn = document.getElementById('show-calendar-btn');
     if (showCalendarBtn) {
