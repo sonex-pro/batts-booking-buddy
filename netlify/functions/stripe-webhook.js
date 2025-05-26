@@ -31,14 +31,17 @@ exports.handler = async (event) => {
       const session = stripeEvent.data.object;
       
       // Extract metadata from the session
-      const { group, date, playerName, totalPrice, bookingType, plan, yourName, discountCode } = session.metadata;
+      const { group, date, playerName, bookingType, plan, yourName, discountCode } = session.metadata;
+      
+      // Get the actual amount from the Stripe session (in cents, need to convert to pounds)
+      const amountPaid = session.amount_total ? (session.amount_total / 100).toFixed(2) : '0.00';
       
       // Prepare data for Google Apps Script
       const bookingData = {
         group,
         date,
         playerName,
-        totalPrice: `£${totalPrice}`,
+        totalPrice: amountPaid,  // Use the actual amount from Stripe
         bookingType,
         plan,
         yourName,
@@ -53,7 +56,7 @@ exports.handler = async (event) => {
         group: bookingData.group,
         date: bookingData.date,
         playerName: bookingData.playerName,
-        amount: bookingData.totalPrice
+        amount: `£${amountPaid}`
       }));
 
       // Send data to Google Apps Script

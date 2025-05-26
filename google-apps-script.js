@@ -43,7 +43,7 @@ function doPost(e) {
     }
     
     // Prepare the payment amount string with pound symbol
-    const paymentAmount = data.totalPrice ? `£${data.totalPrice}` : '';
+    const paymentAmount = data.totalPrice ? `£${data.totalPrice}` : 'No';
     
     // Append the new booking data with only the 4 required columns
     sheet.appendRow([
