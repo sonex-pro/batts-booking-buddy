@@ -208,20 +208,33 @@
                         discountCode: localStorage.getItem('discountCode') || 'None'
                     };
                     
+                    console.log('Sending payment data to Netlify function:', paymentData);
+                    
                     // Create a Netlify function endpoint for creating a payment session
-                    const response = await fetch('/.netlify/functions/create-checkout-session', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(paymentData)
-                    });
-                    
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
+                    let session;
+                    try {
+                        const response = await fetch('/.netlify/functions/create-checkout-session', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(paymentData)
+                        });
+                        
+                        console.log('Response status:', response.status);
+                        
+                        if (!response.ok) {
+                            const errorText = await response.text();
+                            console.error('Error response:', errorText);
+                            throw new Error(`Network response was not ok: ${response.status} ${errorText}`);
+                        }
+                        
+                        session = await response.json();
+                        console.log('Session created:', session);
+                    } catch (fetchError) {
+                        console.error('Fetch error:', fetchError);
+                        throw fetchError;
                     }
-                    
-                    const session = await response.json();
                     
                     // Redirect to Stripe Checkout
                     const result = await stripe.redirectToCheckout({
