@@ -1,4 +1,4 @@
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const stripe = require('stripe')(process.env.Stripe_P_key);
 const axios = require('axios');
 
 exports.handler = async (event) => {
@@ -16,7 +16,7 @@ exports.handler = async (event) => {
       stripeEvent = stripe.webhooks.constructEvent(
         event.body,
         stripeSignature,
-        process.env.STRIPE_WEBHOOK_SECRET
+        process.env.Stripe_webhook_signing
       );
     } catch (error) {
       console.error('Webhook signature verification failed:', error.message);
@@ -50,7 +50,7 @@ exports.handler = async (event) => {
 
       // Send data to Google Apps Script
       try {
-        await axios.post(process.env.GOOGLE_APPS_SCRIPT_URL, bookingData);
+        await axios.post(process.env.Google_Apps_Addresss, bookingData);
         console.log('Data successfully sent to Google Apps Script');
       } catch (error) {
         console.error('Error sending data to Google Apps Script:', error);
