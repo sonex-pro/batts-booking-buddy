@@ -1,0 +1,20 @@
+{
+  "name": "batts-booking-buddy",
+  "version": "1.0.0",
+  "description": "Batt's Booking Buddy - Windsurfing booking website",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "windsurfing",
+    "booking",
+    "stripe"
+  ],
+  "author": "cbj-uk-design",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.6.2",
+    "stripe": "^14.5.0"
+  }
+}

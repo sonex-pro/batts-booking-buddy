@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://js.stripe.com/v3/"></script>
 </head>
 <body>
     <!-- Header -->
@@ -64,7 +65,7 @@
                         
                         <div class="form-actions">
                             <button id="back-home-btn" class="btn btn-primary">Back to Home</button>
-                            <button id="checkout-btn" class="btn btn-primary">Checkout</button>
+                            <button id="checkout-btn" class="btn btn-primary">Pay with Stripe</button>
                         </div>
                     </div>
                 </div>
@@ -175,11 +176,99 @@
                 window.location.href = 'index.html';
             });
             
-            // Handle checkout button
+            // Initialize Stripe
+            const stripe = Stripe('pk_test_51O5JkJJDsGUHVwJPjOCbhKuGEoLKXQQJnxYHQdkPvuXbLSMOaRIRuVLVLGcYp9QQUVVCbSJboTwGHPHBvTIJEVmF00Hs2lPzSZ');
+            
+            // Handle checkout button - Stripe payment integration
             const checkoutBtn = document.getElementById('checkout-btn');
-            checkoutBtn.addEventListener('click', function() {
-                alert('Checkout functionality will be implemented in the future.');
+            checkoutBtn.addEventListener('click', async function() {
+                // Disable the button to prevent multiple clicks
+                checkoutBtn.disabled = true;
+                checkoutBtn.textContent = 'Processing...';
+                
+                try {
+                    // Get booking data
+                    const bookingData = JSON.parse(localStorage.getItem('bookingData'));
+                    const userDetails = JSON.parse(localStorage.getItem('userDetails'));
+                    const totalPrice = localStorage.getItem('totalPrice') || (bookingData ? bookingData.price : '0.00');
+                    
+                    if (!bookingData || !userDetails) {
+                        throw new Error('Missing booking or user details');
+                    }
+                    
+                    // Prepare data for the server
+                    const paymentData = {
+                        group: bookingData.skillLevel || 'Not specified',
+                        date: bookingData.date || bookingData.month || 'Not specified',
+                        playerName: userDetails.playerName || 'Not specified',
+                        totalPrice: parseFloat(totalPrice).toFixed(2),
+                        bookingType: bookingData.bookingType || 'Not specified',
+                        plan: bookingData.plan || 'Not specified',
+                        yourName: userDetails.yourName || 'Not specified',
+                        discountCode: localStorage.getItem('discountCode') || 'None'
+                    };
+                    
+                    // Create a Netlify function endpoint for creating a payment session
+                    const response = await fetch('/.netlify/functions/create-checkout-session', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(paymentData)
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    
+                    const session = await response.json();
+                    
+                    // Redirect to Stripe Checkout
+                    const result = await stripe.redirectToCheckout({
+                        sessionId: session.id
+                    });
+                    
+                    if (result.error) {
+                        throw new Error(result.error.message);
+                    }
+                    
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Payment failed: ' + error.message);
+                    // Re-enable the button
+                    checkoutBtn.disabled = false;
+                    checkoutBtn.textContent = 'Pay with Stripe';
+                }
             });
+            
+            // Check if this is a return from successful payment
+            const urlParams = new URLSearchParams(window.location.search);
+            const paymentSuccess = urlParams.get('payment_success');
+            
+            if (paymentSuccess === 'true') {
+                // Display success message
+                const bookingFormContainer = document.querySelector('.booking-form-container');
+                if (bookingFormContainer) {
+                    bookingFormContainer.innerHTML = `
+                        <div class="payment-success">
+                            <h3>Payment Successful!</h3>
+                            <p>Your booking has been confirmed. Thank you for choosing Batt's Booking Buddy.</p>
+                            <p>A confirmation email will be sent to you shortly.</p>
+                            <button id="return-home" class="btn btn-primary">Return to Home</button>
+                        </div>
+                    `;
+                    
+                    // Add event listener to return home button
+                    const returnHomeBtn = document.getElementById('return-home');
+                    if (returnHomeBtn) {
+                        returnHomeBtn.addEventListener('click', function() {
+                            localStorage.clear();
+                            sessionStorage.clear();
+                            window.location.href = 'index.html';
+                        });
+                    }
+                }
+            }
         });
     </script>
 </body>
