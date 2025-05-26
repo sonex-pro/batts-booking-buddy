@@ -48,12 +48,25 @@ exports.handler = async (event) => {
         sessionId: session.id
       };
 
+      // Log the booking data in Netlify logs
+      console.log('BOOKING DATA:', JSON.stringify({
+        group: bookingData.group,
+        date: bookingData.date,
+        playerName: bookingData.playerName,
+        amount: bookingData.totalPrice
+      }));
+
       // Send data to Google Apps Script
       try {
-        await axios.post(process.env.Google_Apps_Addresss, bookingData);
-        console.log('Data successfully sent to Google Apps Script');
+        console.log('Sending data to Google Apps Script at URL:', process.env.Google_Apps_Addresss);
+        const response = await axios.post(process.env.Google_Apps_Addresss, bookingData);
+        console.log('Response from Google Apps Script:', JSON.stringify(response.data));
       } catch (error) {
-        console.error('Error sending data to Google Apps Script:', error);
+        console.error('Error sending data to Google Apps Script:', error.message);
+        if (error.response) {
+          console.error('Response data:', JSON.stringify(error.response.data));
+          console.error('Response status:', error.response.status);
+        }
         // We don't want to return an error status here as the payment was successful
         // Just log the error and continue
       }

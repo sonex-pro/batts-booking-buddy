@@ -32,43 +32,46 @@ function doPost(e) {
     // Check if headers exist, if not add them
     if (sheet.getLastRow() === 0) {
       sheet.appendRow([
-        'Timestamp',
         'Group',
         'Date',
         'Player Name',
-        'Your Name',
-        'Booking Type',
-        'Plan',
-        'Total Price',
-        'Discount Code',
-        'Payment Status',
-        'Payment Date',
-        'Session ID'
+        'Paid'
       ]);
       
       // Format headers
-      sheet.getRange(1, 1, 1, 12).setFontWeight('bold');
+      sheet.getRange(1, 1, 1, 4).setFontWeight('bold');
     }
     
-    // Append the new booking data
+    // Prepare the payment amount string with pound symbol
+    const paymentAmount = data.totalPrice ? `£${data.totalPrice}` : '';
+    
+    // Append the new booking data with only the 4 required columns
     sheet.appendRow([
-      new Date(), // Current timestamp
-      data.group,
-      data.date,
-      data.playerName,
-      data.yourName,
-      data.bookingType,
-      data.plan,
-      data.totalPrice,
-      data.discountCode,
-      data.paymentStatus,
-      data.paymentDate,
-      data.sessionId
+      data.group || '',
+      data.date || '',
+      data.playerName || '',
+      paymentAmount || 'No'  // Use payment amount or 'No' for Paid column
     ]);
     
+    // Log what was added to the sheet
+    console.log('Added to sheet:', JSON.stringify({
+      group: data.group,
+      date: data.date,
+      playerName: data.playerName,
+      paid: paymentAmount || 'No'
+    }));
+    
     // Return success response
-    return ContentService.createTextOutput(JSON.stringify({ status: 'success', message: 'Data added to spreadsheet' }))
-      .setMimeType(ContentService.MimeType.JSON);
+    return ContentService.createTextOutput(JSON.stringify({ 
+      status: 'success', 
+      message: 'Data added to spreadsheet',
+      data: {
+        group: data.group,
+        date: data.date,
+        playerName: data.playerName,
+        paid: paymentAmount || 'No'
+      }
+    })).setMimeType(ContentService.MimeType.JSON);
       
   } catch (error) {
     // Log the error
