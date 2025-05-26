@@ -2,10 +2,30 @@ const stripe = require('stripe')(process.env.Stripe_P_key);
 const axios = require('axios');
 
 exports.handler = async (event) => {
+  // Set CORS headers for all responses
+  const headers = {
+    'Access-Control-Allow-Origin': '*', // Allow all origins
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS'
+  };
+
+  // Handle preflight OPTIONS request
+  if (event.httpMethod === 'OPTIONS') {
+    return {
+      statusCode: 200,
+      headers,
+      body: ''
+    };
+  }
+
   try {
     // Only allow POST requests
     if (event.httpMethod !== 'POST') {
-      return { statusCode: 405, body: 'Method Not Allowed' };
+      return { 
+        statusCode: 405, 
+        headers,
+        body: 'Method Not Allowed' 
+      };
     }
 
     // Parse the request body
@@ -30,12 +50,12 @@ exports.handler = async (event) => {
           price_data: {
             currency: 'gbp',
             product_data: {
-              name: `Windsurfing Booking - ${data.group}`,
-              description: `${data.bookingType} booking (${data.plan}) for ${data.playerName}`
+              name: `${data.group} Booking - ${data.bookingType || 'Standard'}`,
+              description: `Booking for ${data.date}`,
             },
-            unit_amount: amount
+            unit_amount: Math.round(parseFloat(data.totalPrice) * 100), // Convert to cents/pence
           },
-          quantity: 1
+          quantity: 1,
         }
       ],
       mode: 'payment',
@@ -45,22 +65,23 @@ exports.handler = async (event) => {
         group: data.group,
         date: data.date,
         playerName: data.playerName,
-        totalPrice: data.totalPrice,
-        bookingType: data.bookingType,
-        plan: data.plan,
-        yourName: data.yourName,
-        discountCode: data.discountCode
+        bookingType: data.bookingType || 'Standard',
+        plan: data.plan || 'Standard',
+        yourName: data.yourName || '',
+        discountCode: data.discountCode || 'None'
       }
     });
 
     return {
       statusCode: 200,
+      headers,
       body: JSON.stringify({ id: session.id })
     };
   } catch (error) {
     console.error('Error creating checkout session:', error);
     return {
       statusCode: 500,
+      headers, // Add CORS headers to error response
       body: JSON.stringify({ error: error.message })
     };
   }
