@@ -213,7 +213,11 @@
                     // Create a Netlify function endpoint for creating a payment session
                     let session;
                     try {
-                        const response = await fetch('/.netlify/functions/create-checkout-session', {
+                        // Use the full URL to the Netlify function
+                        const functionUrl = 'https://cbjsonex.netlify.app/.netlify/functions/create-checkout-session';
+                        console.log('Calling function at:', functionUrl);
+                        
+                        const response = await fetch(functionUrl, {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
