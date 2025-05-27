@@ -30,10 +30,21 @@ function doPost(e) {
 
     const paymentAmount = data.totalPrice ? `£${data.totalPrice}` : 'No';
 
+    // Determine the date format to use based on booking type
+    let dateToDisplay = '';
+    
+    if (data.bookingType === 'monthly') {
+      // For monthly bookings, use the month format (e.g., 'June 2025')
+      dateToDisplay = data.month || data.date || '';
+    } else {
+      // For single day bookings, use the short date format (DD/MM/YY)
+      dateToDisplay = data.shortDate || data.date || '';
+    }
+    
     // Append new booking data
     sheet.appendRow([
       data.group || '',
-      data.shortDate || data.date || '',  // Use shortDate (DD/MM/YY) if available, otherwise use the regular date
+      dateToDisplay,
       data.playerName || '',
       paymentAmount
     ]);

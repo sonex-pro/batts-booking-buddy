@@ -32,6 +32,10 @@ exports.handler = async (event) => {
 
       // Extract metadata from the session
       const { group, date, shortDate, playerName, bookingType, plan, yourName, discountCode } = session.metadata;
+      
+      // For monthly bookings, the date field contains the month (e.g., 'June 2025')
+      // We'll extract this as a separate month property
+      const month = bookingType === 'monthly' ? date : '';
 
       // Get the actual amount from the Stripe session (in cents, need to convert to pounds)
       const amountPaid = session.amount_total ? (session.amount_total / 100).toFixed(2) : '0.00';
@@ -41,6 +45,7 @@ exports.handler = async (event) => {
         group,
         date,
         shortDate, // Include the short date format for Google Sheet
+        month,     // Include the month for monthly bookings
         playerName,
         totalPrice: amountPaid,  // Use the actual amount from Stripe
         bookingType,
@@ -57,6 +62,8 @@ exports.handler = async (event) => {
         group: bookingData.group,
         date: bookingData.date,
         shortDate: bookingData.shortDate || 'Not provided',
+        month: bookingData.month || 'Not provided',
+        bookingType: bookingData.bookingType || 'Not specified',
         playerName: bookingData.playerName,
         amount: `£${amountPaid}`
       }));

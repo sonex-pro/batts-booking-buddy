@@ -64,7 +64,10 @@ exports.handler = async (event) => {
       metadata: {
         group: data.group,
         date: data.date,
-        shortDate: data.shortDate || '', // Add short date format for Google Sheet
+        shortDate: data.shortDate || '', // Short date format for single bookings
+        // For monthly bookings, we need to pass the month information
+        // If bookingType is monthly, use the month field or date field
+        month: data.bookingType === 'monthly' ? (data.month || data.date) : '',
         playerName: data.playerName,
         bookingType: data.bookingType || 'Standard',
         plan: data.plan || 'Standard',
