@@ -406,7 +406,7 @@ function saveSessionData(date, price, plan) {
     // Convert date string to Date object
     const selectedDate = new Date(date);
     
-    // Format date for display
+    // Format date for display (long format)
     const formattedDate = selectedDate.toLocaleDateString('en-GB', { 
         weekday: 'long',
         year: 'numeric', 
@@ -414,8 +414,16 @@ function saveSessionData(date, price, plan) {
         day: 'numeric' 
     });
     
+    // Format date for Google Sheet (short UK format DD/MM/YY)
+    const shortDate = selectedDate.toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: '2-digit',
+        year: '2-digit'
+    });
+    
     const bookingData = {
         date: formattedDate,
+        shortDate: shortDate,
         price: price,
         plan: plan,
         skillLevel: getSkillLevelFromPage(),

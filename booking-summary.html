@@ -200,6 +200,7 @@
                     const paymentData = {
                         group: bookingData.skillLevel || 'Not specified',
                         date: bookingData.date || bookingData.month || 'Not specified',
+                        shortDate: bookingData.shortDate || '', // Add short date format (DD/MM/YY) for Google Sheet
                         playerName: userDetails.playerName || 'Not specified',
                         totalPrice: parseFloat(totalPrice).toFixed(2),
                         bookingType: bookingData.bookingType || 'Not specified',

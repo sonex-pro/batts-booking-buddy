@@ -33,7 +33,7 @@ function doPost(e) {
     // Append new booking data
     sheet.appendRow([
       data.group || '',
-      data.date || '',
+      data.shortDate || data.date || '',  // Use shortDate (DD/MM/YY) if available, otherwise use the regular date
       data.playerName || '',
       paymentAmount
     ]);
