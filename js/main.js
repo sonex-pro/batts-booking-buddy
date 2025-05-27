@@ -390,8 +390,28 @@ function populateMonthOptions(selectElements) {
 
 // Function to save booking data to localStorage
 function saveBookingData(month, price, plan) {
+    // Parse the month string (e.g., 'January 2025') to create a Date object
+    const monthParts = month.split(' ');
+    const monthName = monthParts[0];
+    const year = monthParts[1];
+    
+    // Convert month name to month index (0-11)
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const monthIndex = months.indexOf(monthName);
+    
+    // Create a Date object for the 1st day of the month
+    const monthDate = new Date(parseInt(year), monthIndex, 1);
+    
+    // Format date for Google Sheet (short UK format DD/MM/YY)
+    const shortDate = monthDate.toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: '2-digit',
+        year: '2-digit'
+    });
+    
     const bookingData = {
         month: month,
+        shortDate: shortDate, // Add short date format
         price: price,
         plan: plan,
         skillLevel: getSkillLevelFromPage(),

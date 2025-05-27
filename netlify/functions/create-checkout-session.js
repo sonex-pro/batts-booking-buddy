@@ -64,6 +64,7 @@ exports.handler = async (event) => {
       metadata: {
         group: data.group,
         date: data.date,
+        shortDate: data.shortDate || '', // Add short date format for Google Sheet
         playerName: data.playerName,
         bookingType: data.bookingType || 'Standard',
         plan: data.plan || 'Standard',

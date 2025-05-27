@@ -31,7 +31,7 @@ exports.handler = async (event) => {
       const session = stripeEvent.data.object;
 
       // Extract metadata from the session
-      const { group, date, playerName, bookingType, plan, yourName, discountCode } = session.metadata;
+      const { group, date, shortDate, playerName, bookingType, plan, yourName, discountCode } = session.metadata;
 
       // Get the actual amount from the Stripe session (in cents, need to convert to pounds)
       const amountPaid = session.amount_total ? (session.amount_total / 100).toFixed(2) : '0.00';
@@ -40,6 +40,7 @@ exports.handler = async (event) => {
       const bookingData = {
         group,
         date,
+        shortDate, // Include the short date format for Google Sheet
         playerName,
         totalPrice: amountPaid,  // Use the actual amount from Stripe
         bookingType,
@@ -55,6 +56,7 @@ exports.handler = async (event) => {
       console.log('BOOKING DATA:', JSON.stringify({
         group: bookingData.group,
         date: bookingData.date,
+        shortDate: bookingData.shortDate || 'Not provided',
         playerName: bookingData.playerName,
         amount: `£${amountPaid}`
       }));
