@@ -29,13 +29,13 @@ exports.handler = async (event) => {
     // Handle the checkout.session.completed event
     if (stripeEvent.type === 'checkout.session.completed') {
       const session = stripeEvent.data.object;
-      
+
       // Extract metadata from the session
       const { group, date, playerName, bookingType, plan, yourName, discountCode } = session.metadata;
-      
+
       // Get the actual amount from the Stripe session (in cents, need to convert to pounds)
       const amountPaid = session.amount_total ? (session.amount_total / 100).toFixed(2) : '0.00';
-      
+
       // Prepare data for Google Apps Script
       const bookingData = {
         group,
@@ -61,8 +61,8 @@ exports.handler = async (event) => {
 
       // Send data to Google Apps Script
       try {
-        console.log('Sending data to Google Apps Script at URL:', process.env.Google_Apps_Addresss);
-        const response = await axios.post(process.env.Google_Apps_Addresss, bookingData);
+        console.log('Sending data to Google Apps Script at URL:', process.env.GOOGLE_APPS_SCRIPT_URL);
+        const response = await axios.post(process.env.GOOGLE_APPS_SCRIPT_URL, bookingData);
         console.log('Response from Google Apps Script:', JSON.stringify(response.data));
       } catch (error) {
         console.error('Error sending data to Google Apps Script:', error.message);
@@ -87,3 +87,4 @@ exports.handler = async (event) => {
     };
   }
 };
+
