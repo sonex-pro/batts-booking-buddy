@@ -15,11 +15,11 @@ function doPost(e) {
     Logger.log('Received data: ' + JSON.stringify(data));
 
     const ss = SpreadsheetApp.getActiveSpreadsheet();
-    const sheet = ss.getSheetByName('Batts online payment record');
+    const sheet = ss.getSheetByName('Coaching');
 
     // Throw an error if the sheet isn't found
     if (!sheet) {
-      throw new Error('Sheet "Batts online payment record" not found.');
+      throw new Error('Sheet "Coaching" not found.');
     }
 
     // Add headers if they don't exist
