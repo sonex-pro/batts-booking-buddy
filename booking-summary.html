@@ -201,6 +201,7 @@
                         group: bookingData.skillLevel || 'Not specified',
                         date: bookingData.date || bookingData.month || 'Not specified',
                         shortDate: bookingData.shortDate || '', // Add short date format (DD/MM/YY) for Google Sheet
+                        rawDate: bookingData.rawDate || '', // Add raw date for accurate date tracking
                         playerName: userDetails.playerName || 'Not specified',
                         totalPrice: parseFloat(totalPrice).toFixed(2),
                         bookingType: bookingData.bookingType || 'Not specified',

@@ -241,8 +241,13 @@ document.addEventListener('DOMContentLoaded', function() {
                             // Update selected date display
                             selectedDateDisplay.textContent = `Selected: ${formattedDate}`;
                             
-                            // Save session data
-                            saveSessionData(selectedDate.toISOString().split('T')[0], price, plan);
+                            // Save session data - pass the date components directly instead of ISO string
+                            // This prevents timezone issues where the date might shift
+                            saveSessionData({
+                                year: currentYear,
+                                month: currentMonth,
+                                day: day
+                            }, price, plan);
                             
                             // Enable the next button
                             const nextButton = document.getElementById('next-button');
@@ -408,28 +413,40 @@ function saveBookingData(month, price, plan) {
 }
 
 // Function to save session data to localStorage
-function saveSessionData(date, price, plan) {
-    // Convert date string to Date object
-    const selectedDate = new Date(date);
+function saveSessionData(dateComponents, price, plan) {
+    // Create Date object from components - this avoids timezone issues
+    // Note: JavaScript months are 0-indexed (0 = January, 11 = December)
+    const selectedDate = new Date(
+        dateComponents.year, 
+        dateComponents.month, 
+        dateComponents.day, 
+        12, 0, 0 // Set to noon to avoid any timezone day-shifting issues
+    );
+    
+    // Get day of week name (e.g., 'Monday')
+    const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const dayOfWeek = weekdays[selectedDate.getDay()];
+    
+    // Get month name (e.g., 'June')
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const monthName = months[selectedDate.getMonth()];
     
     // Format date for display (long format)
-    const formattedDate = selectedDate.toLocaleDateString('en-GB', { 
-        weekday: 'long',
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric' 
-    });
+    const formattedDate = `${dayOfWeek} ${selectedDate.getDate()} ${monthName} ${selectedDate.getFullYear()}`;
     
     // Format date for Google Sheet (short UK format DD/MM/YY)
-    const shortDate = selectedDate.toLocaleDateString('en-GB', {
-        day: '2-digit',
-        month: '2-digit',
-        year: '2-digit'
-    });
+    const day = String(selectedDate.getDate()).padStart(2, '0');
+    const month = String(selectedDate.getMonth() + 1).padStart(2, '0'); // +1 because months are 0-indexed
+    const year = String(selectedDate.getFullYear()).slice(-2); // Get last 2 digits of year
+    const shortDate = `${day}/${month}/${year}`;
+    
+    // Store the raw date components for reference (useful for debugging)
+    const rawDateStr = `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`;
     
     const bookingData = {
         date: formattedDate,
         shortDate: shortDate,
+        rawDate: rawDateStr, // Store raw date for reference
         price: price,
         plan: plan,
         skillLevel: getSkillLevelFromPage(),

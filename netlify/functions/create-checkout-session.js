@@ -65,6 +65,7 @@ exports.handler = async (event) => {
         group: data.group,
         date: data.date,
         shortDate: data.shortDate || '', // Short date format for single bookings
+        rawDate: data.rawDate || '', // Raw date for accurate date tracking
         // For monthly bookings, we need to pass the month information
         // If bookingType is monthly, use the month field or date field
         month: data.bookingType === 'monthly' ? (data.month || data.date) : '',
