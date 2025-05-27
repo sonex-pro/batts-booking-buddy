@@ -18,12 +18,14 @@ function doGet(e) {
 
 // Handle POST requests from Netlify
 function doPost(e) {
+  // Log that the function was triggered
+  Logger.log('doPost function triggered - webhook received from Netlify');
   try {
     // Parse the incoming data
     const data = JSON.parse(e.postData.contents);
     
     // Log the received data for debugging
-    console.log('Received data:', JSON.stringify(data));
+    Logger.log('Received data: ' + JSON.stringify(data));
     
     // Get the active spreadsheet and sheet
     const ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -54,7 +56,7 @@ function doPost(e) {
     ]);
     
     // Log what was added to the sheet
-    console.log('Added to sheet:', JSON.stringify({
+    Logger.log('Added to sheet: ' + JSON.stringify({
       group: data.group,
       date: data.date,
       playerName: data.playerName,
@@ -75,7 +77,7 @@ function doPost(e) {
       
   } catch (error) {
     // Log the error
-    console.error('Error processing request:', error);
+    Logger.log('Error processing request: ' + error.toString());
     
     // Return error response
     return ContentService.createTextOutput(JSON.stringify({ status: 'error', message: error.toString() }))
