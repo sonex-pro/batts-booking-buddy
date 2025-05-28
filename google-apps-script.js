@@ -17,7 +17,6 @@ function doPost(e) {
     const ss = SpreadsheetApp.getActiveSpreadsheet();
     const sheet = ss.getSheetByName('Coaching');
 
-    // Throw an error if the sheet isn't found
     if (!sheet) {
       throw new Error('Sheet "Coaching" not found.');
     }
@@ -30,32 +29,63 @@ function doPost(e) {
 
     const paymentAmount = data.totalPrice ? `£${data.totalPrice}` : 'No';
 
-    // Determine the date format to use based on booking type
+    // Determine date to display (remains as plain text)
     let dateToDisplay = '';
-    
     if (data.bookingType === 'monthly') {
-      // For monthly bookings, use the month format (e.g., 'June 2025')
       dateToDisplay = data.month || data.date || '';
     } else {
-      // For single day bookings, use the short date format (DD/MM/YY)
       dateToDisplay = data.shortDate || data.date || '';
     }
-    
+
     // Append new booking data
-    sheet.appendRow([
+    const newRow = [
       data.group || '',
       dateToDisplay,
       data.playerName || '',
       paymentAmount
-    ]);
+    ];
+    sheet.appendRow(newRow);
 
-    // Sort the sheet by Group (A), then Date (B)
+    // Custom sort order
+    const groupOrder = {
+      'Under 11': 1,
+      'Open': 2,
+      'Squad': 3
+    };
+
+    // Sort the data manually
     const lastRow = sheet.getLastRow();
     if (lastRow > 1) {
-      sheet.getRange(2, 1, lastRow - 1, 4).sort([{ column: 1 }, { column: 2 }]);
+      const range = sheet.getRange(2, 1, lastRow - 1, 4);
+      const values = range.getValues();
+
+      values.sort((a, b) => {
+        const groupA = groupOrder[a[0]] || 99;
+        const groupB = groupOrder[b[0]] || 99;
+        if (groupA !== groupB) {
+          return groupA - groupB;
+        }
+
+        // Parse dates only for comparison (won't affect what's written)
+        const parseDate = (str) => {
+          const parts = str.split('/');
+          if (parts.length === 3) {
+            const [day, month, year] = parts.map(p => parseInt(p, 10));
+            return new Date(year < 100 ? 2000 + year : year, month - 1, day);
+          }
+          return new Date(str);
+        };
+
+        const dateA = parseDate(a[1]);
+        const dateB = parseDate(b[1]);
+        return dateA - dateB;
+      });
+
+      range.clearContent();
+      sheet.getRange(2, 1, values.length, 4).setValues(values);
     }
 
-    Logger.log('Data successfully added.');
+    Logger.log('Data successfully added and sorted.');
 
     return ContentService.createTextOutput(JSON.stringify({
       status: 'success',
