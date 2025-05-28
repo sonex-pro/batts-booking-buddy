@@ -32,7 +32,7 @@ function doPost(e) {
 
     // Determine the date format to use based on booking type
     let dateToDisplay = '';
-
+    
     if (data.bookingType === 'monthly') {
       // For monthly bookings, use the month format (e.g., 'June 2025')
       dateToDisplay = data.month || data.date || '';
@@ -40,16 +40,7 @@ function doPost(e) {
       // For single day bookings, use the short date format (DD/MM/YY)
       dateToDisplay = data.shortDate || data.date || '';
     }
-
-    // Replace group names as needed
-    if (data.group === 'Intermediate') {
-      data.group = 'Open';
-    } else if (data.group === 'Beginner') {
-      data.group = 'Under 11';
-    } else if (data.group === 'Advanced') {
-      data.group = 'Squad';
-    }
-
+    
     // Append new booking data
     sheet.appendRow([
       data.group || '',
