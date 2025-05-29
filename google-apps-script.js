@@ -32,7 +32,7 @@ function doPost(e) {
 
     // Determine the date format to use based on booking type
     let dateToDisplay = '';
-    
+
     if (data.bookingType === 'monthly') {
       // For monthly bookings, use the month format (e.g., 'June 2025')
       dateToDisplay = data.month || data.date || '';
@@ -40,7 +40,7 @@ function doPost(e) {
       // For single day bookings, use the short date format (DD/MM/YY)
       dateToDisplay = data.shortDate || data.date || '';
     }
-    
+
     // Append new booking data
     sheet.appendRow([
       data.group || '',
@@ -49,10 +49,13 @@ function doPost(e) {
       paymentAmount
     ]);
 
-    // Sort the sheet by Group (A), then Date (B)
+    // Sort the sheet by Group (A) in reverse alphabetical order, then Date (B) in default order
     const lastRow = sheet.getLastRow();
     if (lastRow > 1) {
-      sheet.getRange(2, 1, lastRow - 1, 4).sort([{ column: 1 }, { column: 2 }]);
+      sheet.getRange(2, 1, lastRow - 1, 4).sort([
+        { column: 1, ascending: false }, // Reverse alphabetical order for Group
+        { column: 2, ascending: true }  // Default order for Date
+      ]);
     }
 
     Logger.log('Data successfully added.');
@@ -74,4 +77,5 @@ function doPost(e) {
       .setMimeType(ContentService.MimeType.JSON);
   }
 }
+
 
