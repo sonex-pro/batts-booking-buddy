@@ -423,26 +423,26 @@ img {
 }
 
 .booking-card {
-    background-color: #f5f5f5; /* Very light grey background */
+    background-color: #e6f0ff; /* Pale blue background as per memory */
     border-radius: 8px;
-    padding: 1.25rem;
+    padding: 1rem 1.25rem; /* Reduced vertical padding */
     box-shadow: var(--shadow);
     display: flex;
     flex-direction: column;
-    height: 100%;
+    height: auto; /* Changed from 100% to auto for more compact height */
 }
 
 /* Removed hover animation */
 
 .booking-card h3 {
-    color: #181818;
-    margin-bottom: 0.5rem;
-    font-size: 1.2rem;
+    color: #0e43ca; /* Blue color to match the H1 heading as per memory */
+    margin-bottom: 0.4rem; /* Reduced margin */
+    font-size: 1.1rem; /* Slightly smaller font */
     font-weight: 600;
 }
 
 .booking-card p {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.4rem; /* Reduced margin */
     font-size: 0.9rem;
     color: #181818;
     font-weight: 400;
@@ -451,7 +451,7 @@ img {
 .booking-card .price {
     font-weight: 400;
     color: #181818;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem; /* Reduced margin */
     font-size: 0.9rem;
 }
 
@@ -663,6 +663,21 @@ img {
 
 #show-calendar-btn {
     padding: 8px 2rem;
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #ddd;
+    position: relative;
+    text-align: left;
+}
+
+#show-calendar-btn::after {
+    content: '\25BC'; /* Unicode down arrow/chevron */
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.8rem;
+    pointer-events: none;
 }
 
 .calendar-wrapper {
