@@ -29,7 +29,7 @@ function doPost(e) {
 
     const paymentAmount = data.totalPrice ? `£${data.totalPrice}` : 'No';
 
-    // Determine date to display (remains as plain text)
+    // Determine date to display (as plain text)
     let dateToDisplay = '';
     if (data.bookingType === 'monthly') {
       dateToDisplay = data.month || data.date || '';
@@ -46,43 +46,56 @@ function doPost(e) {
     ];
     sheet.appendRow(newRow);
 
-    // Custom sort order
+    // Custom group sort order
     const groupOrder = {
       'Under 11': 1,
       'Open': 2,
       'Squad': 3
     };
 
-    // Sort the data manually
     const lastRow = sheet.getLastRow();
     if (lastRow > 1) {
       const range = sheet.getRange(2, 1, lastRow - 1, 4);
       const values = range.getValues();
 
-      values.sort((a, b) => {
-        const groupA = groupOrder[a[0]] || 99;
-        const groupB = groupOrder[b[0]] || 99;
-        if (groupA !== groupB) {
-          return groupA - groupB;
+      // Helper to parse dates for sorting (doesn't affect text in sheet)
+      const parseDate = (str) => {
+        const parts = str.split('/');
+        if (parts.length === 3) {
+          const [day, month, year] = parts.map(p => parseInt(p, 10));
+          return new Date(year < 100 ? 2000 + year : year, month - 1, day);
         }
+        const parsed = new Date(str);
+        return isNaN(parsed) ? new Date(9999, 11, 31) : parsed;
+      };
 
-        // Parse dates only for comparison (won't affect what's written)
-        const parseDate = (str) => {
-          const parts = str.split('/');
-          if (parts.length === 3) {
-            const [day, month, year] = parts.map(p => parseInt(p, 10));
-            return new Date(year < 100 ? 2000 + year : year, month - 1, day);
-          }
-          return new Date(str);
-        };
-
-        const dateA = parseDate(a[1]);
-        const dateB = parseDate(b[1]);
-        return dateA - dateB;
+      // Group and sort data by custom group and date
+      const groupedData = Object.keys(groupOrder).map(group => {
+        return values
+          .filter(row => row[0] === group)
+          .sort((a, b) => parseDate(a[1]) - parseDate(b[1]));
       });
 
+      const sortedValues = groupedData.flat();
+
+      // Write sorted values
       range.clearContent();
-      sheet.getRange(2, 1, values.length, 4).setValues(values);
+      const targetRange = sheet.getRange(2, 1, sortedValues.length, 4);
+      targetRange.setValues(sortedValues);
+
+      // Apply color to Group column
+      sortedValues.forEach((row, i) => {
+        const group = row[0];
+        let color = null;
+
+        if (group === 'Under 11') color = '#D0E9FF'; // Light Blue
+        else if (group === 'Open') color = '#DFFFD0'; // Light Green
+        else if (group === 'Squad') color = '#FFF8D0'; // Light Yellow
+
+        if (color) {
+          sheet.getRange(i + 2, 1).setBackground(color);
+        }
+      });
     }
 
     Logger.log('Data successfully added and sorted.');
