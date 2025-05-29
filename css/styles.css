@@ -472,7 +472,7 @@ img {
 
 /* About Section */
 .about {
-    padding: 4rem 0;
+    padding: 2rem 0;
     text-align: left;
 }
 
@@ -481,7 +481,7 @@ img {
 }
 
 .about h2 {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
     font-size: 1.8rem;
     color: #000;
 }
@@ -494,7 +494,7 @@ img {
 
 /* Session Fees and Times Section */
 .fees {
-    padding: 4rem 0;
+    padding: 2rem 0;
     background-color: var(--white);
 }
 
@@ -503,7 +503,7 @@ img {
 }
 
 .fees h2 {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
     font-size: 1.8rem;
     color: #000;
     text-align: left;
@@ -512,14 +512,14 @@ img {
 .fees-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.25rem;
-    margin-top: 1rem;
+    gap: 1rem;
+    margin-top: 0.75rem;
 }
 
 .fee-card {
-    background-color: #f5f5f5; /* Very light grey background */
+    background-color: #e6f0ff; /* Pale blue background from memory */
     border-radius: 8px;
-    padding: 1.25rem;
+    padding: 1rem;
     box-shadow: var(--shadow);
     display: flex;
     flex-direction: column;
@@ -543,7 +543,7 @@ img {
 }
 
 .session-times {
-    margin: 0.5rem 0;
+    margin: 0.3rem 0;
 }
 
 .session-times h4 {
@@ -564,7 +564,7 @@ img {
 }
 
 .pricing {
-    margin: 0.5rem 0 0.75rem 0;
+    margin: 0.3rem 0 0.5rem 0;
 }
 
 .pricing p {
@@ -583,9 +583,9 @@ img {
 }
 
 .membership-note {
-    margin-top: 2rem;
-    padding: 1rem;
-    background-color: #f8f9fa;
+    margin-top: 1.5rem;
+    padding: 0.75rem;
+    background-color: #e6f0ff;
     border-left: 4px solid #0e43ca;
     font-style: italic;
     max-width: 800px;
