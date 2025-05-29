@@ -32,15 +32,13 @@ function doPost(e) {
 
     // Determine the date format to use based on booking type
     let dateToDisplay = '';
-
+    
     if (data.bookingType === 'monthly') {
-      // For monthly bookings, use the month format (e.g., 'June 2025')
       dateToDisplay = data.month || data.date || '';
     } else {
-      // For single day bookings, use the short date format (DD/MM/YY)
       dateToDisplay = data.shortDate || data.date || '';
     }
-
+    
     // Append new booking data
     sheet.appendRow([
       data.group || '',
@@ -49,13 +47,22 @@ function doPost(e) {
       paymentAmount
     ]);
 
-    // Sort the sheet by Group (A) in reverse alphabetical order, then Date (B) in default order
-    const lastRow = sheet.getLastRow();
-    if (lastRow > 1) {
-      sheet.getRange(2, 1, lastRow - 1, 4).sort([
-        { column: 1, ascending: false }, // Reverse alphabetical order for Group
-        { column: 2, ascending: true }  // Default order for Date
-      ]);
+    // Apply color to the group cell in the new row
+    const newRow = sheet.getLastRow();
+    const groupCell = sheet.getRange(newRow, 1); // Column A
+
+    const groupValue = data.group || '';
+    if (groupValue === '1-Under 11') {
+      groupCell.setFontColor('green');
+    } else if (groupValue === '2-Open') {
+      groupCell.setFontColor('blue');
+    } else if (groupValue === '3-Squad') {
+      groupCell.setFontColor('#E0B0FF'); // Mauve (hex)
+    }
+
+    // Sort the sheet by Group (A), then Date (B)
+    if (newRow > 1) {
+      sheet.getRange(2, 1, newRow - 1, 4).sort([{ column: 1 }, { column: 2 }]);
     }
 
     Logger.log('Data successfully added.');
