@@ -57,7 +57,7 @@ function doPost(e) {
     } else if (groupValue === '2-Open') {
       groupCell.setFontColor('blue');
     } else if (groupValue === '3-Squad') {
-      groupCell.setFontColor('#E0B0FF'); // Mauve (hex)
+      groupCell.setFontColor('#9966CC'); // Deep Lilac
     }
 
     // Sort the sheet by Group (A), then Date (B)
