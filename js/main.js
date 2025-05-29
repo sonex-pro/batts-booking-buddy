@@ -569,11 +569,11 @@ function displayBookingSummary() {
 function getSkillLevelFromPage() {
     const path = window.location.pathname;
     if (path.includes('beginner')) {
-        return 'Under 11';
+        return '1-Under 11';
     } else if (path.includes('intermediate')) {
-        return 'Open';
+        return '2-Open';
     } else if (path.includes('advanced')) {
-        return 'Squad';
+        return '3-Squad';
     } else {
         return 'Unknown';
     }
