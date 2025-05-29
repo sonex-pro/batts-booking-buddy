@@ -58,33 +58,58 @@ function doPost(e) {
       const range = sheet.getRange(2, 1, lastRow - 1, 4);
       const values = range.getValues();
 
-      // Helper to parse dates for sorting (doesn't affect text in sheet)
+      // Improved helper to parse various date formats for sorting
       const parseDate = (str) => {
-        const parts = str.split('/');
-        if (parts.length === 3) {
-          const [day, month, year] = parts.map(p => parseInt(p, 10));
+        if (!str) return new Date(9999, 11, 31); // Handle empty dates
+        
+        // Handle DD/MM/YY format
+        const dayMonthYearParts = str.split('/');
+        if (dayMonthYearParts.length === 3) {
+          const [day, month, year] = dayMonthYearParts.map(p => parseInt(p, 10));
           return new Date(year < 100 ? 2000 + year : year, month - 1, day);
         }
+        
+        // Handle month names like "June 2025"
+        const monthNames = ['january', 'february', 'march', 'april', 'may', 'june',
+                           'july', 'august', 'september', 'october', 'november', 'december'];
+        const monthYearRegex = /(\w+)\s+(\d{4})/i;
+        const monthYearMatch = str.match(monthYearRegex);
+        
+        if (monthYearMatch) {
+          const month = monthNames.findIndex(m => m.toLowerCase() === monthYearMatch[1].toLowerCase());
+          const year = parseInt(monthYearMatch[2], 10);
+          if (month !== -1) {
+            return new Date(year, month, 1);
+          }
+        }
+        
+        // Try standard date parsing as last resort
         const parsed = new Date(str);
-        return isNaN(parsed) ? new Date(9999, 11, 31) : parsed;
+        return isNaN(parsed.getTime()) ? new Date(9999, 11, 31) : parsed;
       };
 
-      // Group and sort data by custom group and date
-      const groupedData = Object.keys(groupOrder).map(group => {
-        return values
-          .filter(row => row[0] === group)
-          .sort((a, b) => parseDate(a[1]) - parseDate(b[1]));
+      // First sort all values by group name according to groupOrder
+      values.sort((a, b) => {
+        const groupA = a[0];
+        const groupB = b[0];
+        const orderA = groupOrder[groupA] || 999;
+        const orderB = groupOrder[groupB] || 999;
+        
+        if (orderA !== orderB) {
+          return orderA - orderB;
+        }
+        
+        // If same group, sort by date
+        return parseDate(a[1]) - parseDate(b[1]);
       });
-
-      const sortedValues = groupedData.flat();
-
+      
       // Write sorted values
       range.clearContent();
-      const targetRange = sheet.getRange(2, 1, sortedValues.length, 4);
-      targetRange.setValues(sortedValues);
+      const targetRange = sheet.getRange(2, 1, values.length, 4);
+      targetRange.setValues(values);
 
-      // Apply color to Group column
-      sortedValues.forEach((row, i) => {
+      // Apply color to entire row based on group
+      values.forEach((row, i) => {
         const group = row[0];
         let color = null;
 
@@ -93,7 +118,8 @@ function doPost(e) {
         else if (group === 'Squad') color = '#FFF8D0'; // Light Yellow
 
         if (color) {
-          sheet.getRange(i + 2, 1).setBackground(color);
+          // Apply color to the entire row instead of just the first cell
+          sheet.getRange(i + 2, 1, 1, 4).setBackground(color);
         }
       });
     }
