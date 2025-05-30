@@ -827,6 +827,9 @@ img {
 
 .contact-info, .contact-form {
     background-color: #e6f0ff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
 }
 
 .contact-details {
@@ -933,11 +936,16 @@ img {
 /* Responsive styles for contact page */
 @media (max-width: 768px) {
     .contact-content {
-        flex-direction: column;
+        grid-template-columns: 1fr;
     }
     
     .contact-details {
         grid-template-columns: 1fr;
+    }
+    
+    .contact-info, .contact-form {
+        width: 100%;
+        margin-bottom: 1.5rem;
     }
 }
 
