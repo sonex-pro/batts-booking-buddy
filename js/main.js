@@ -316,6 +316,40 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
+    // Contact form submission
+    const contactForm = document.getElementById('contactForm');
+    if (contactForm) {
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(this);
+            const formObject = {};
+            
+            formData.forEach((value, key) => {
+                formObject[key] = value;
+            });
+            
+            // Get the target email address from the hidden field
+            const targetEmail = formObject.contact_email || 'info@battsharlow.com';
+            
+            // Log form data (in a real scenario, you would send this to a server)
+            console.log('Contact form submitted:', formObject);
+            
+            // Show success message
+            const successMessage = document.createElement('div');
+            successMessage.className = 'form-success';
+            successMessage.innerHTML = `<p>Thank you for your message! We will contact you shortly.</p><p>Your message has been prepared for: ${targetEmail}</p>`;
+            
+            // Replace form with success message
+            contactForm.style.display = 'none';
+            contactForm.parentNode.appendChild(successMessage);
+            
+            // In a real implementation, you would send this data to a server
+            // For now, we're just showing a success message
+        });
+    }
+    
     // Set minimum date to today for the date picker
     const dateInput = document.querySelector('input[type="date"]');
     if (dateInput) {
