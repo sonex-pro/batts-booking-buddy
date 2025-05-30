@@ -907,6 +907,31 @@ img {
     color: var(--white);
     padding: 2rem 0;
     text-align: center;
+    font-family: Georgia, serif;
+}
+
+.footer p, .footer a {
+    color: var(--white);
+    margin-bottom: 0.5rem;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+    .footer-links {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
 }
 
 /* Mobile Navigation */
