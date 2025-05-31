@@ -361,7 +361,7 @@ img {
     }
     
     .hero h1 {
-        font-size: 1.2rem; /* Smaller heading on mobile */
+        font-size: 1.8rem; /* Smaller heading on mobile */
         margin-bottom: 0.5rem;
     }
     
@@ -1140,5 +1140,20 @@ img {
     
     .lesson-grid {
         grid-template-columns: 1fr;
+    }
+}
+
+/* Home Page Mobile Hero Font Size Overrides */
+@media (max-width: 768px) {
+    .index-background .hero h1 {
+        font-size: 1.8rem !important;
+    }
+    
+    .index-background .hero h2 {
+        font-size: 1.3rem !important;
+    }
+    
+    .index-background .hero p {
+        font-size: 1.1rem !important;
     }
 }
