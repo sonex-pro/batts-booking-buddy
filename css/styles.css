@@ -448,26 +448,33 @@ img {
 }
 
 .blue-heading {
-    color: #0e43ca;
+    color: #000000;
     font-size: 2.5rem;
     margin-bottom: 1rem;
-    padding-top: 10px;
+    background-color: #0e43ca;
+    padding: 0.8rem;
+    display: inline-block;
 }
 
 .blue-subheading {
-    color: #0e43ca;
+    color: #000000;
     font-size: 1.5rem;
     font-weight: 400;
     margin-bottom: 2rem;
+    background-color: #0e43ca;
+    padding: 0.8rem;
+    display: inline-block;
 }
 
 @media (max-width: 768px) {
     .blue-heading {
         font-size: 2rem;
+        padding: 0.6rem;
     }
     
     .blue-subheading {
         font-size: 1.3rem;
+        padding: 0.6rem;
     }
 }
 
