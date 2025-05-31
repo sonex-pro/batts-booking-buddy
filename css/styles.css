@@ -361,7 +361,7 @@ img {
     }
     
     .hero h1 {
-        font-size: 1.5rem; /* Smaller heading on mobile */
+        font-size: 1.2rem; /* Smaller heading on mobile */
         margin-bottom: 0.5rem;
     }
     
@@ -371,7 +371,7 @@ img {
     }
     
     .hero p {
-        font-size: 1rem;
+        font-size: 1.1rem;
     }
 }
 
