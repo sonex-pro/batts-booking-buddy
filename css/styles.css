@@ -321,7 +321,7 @@ img {
 
 /* Hero Section */
 .hero {
-    padding-top: 2rem; /* Space hero content 2rem below navbar */
+    padding-top: 7rem; /* Space hero content 7rem below navbar */
     padding-bottom: 2rem; /* Reduced padding */
     color: var(--white);
     text-align: left;
@@ -361,7 +361,7 @@ img {
     }
     
     .hero h1 {
-        font-size: 1.7rem; /* Smaller heading on mobile */
+        font-size: 1.5rem; /* Smaller heading on mobile */
         margin-bottom: 0.5rem;
     }
     
