@@ -322,9 +322,17 @@ img {
 /* Hero Section */
 .hero {
     padding-top: 100px; /* 80px logo + 20px gap */
-    padding-bottom: 3rem;
+    padding-bottom: 2rem; /* Reduced padding */
     color: var(--white);
     text-align: left;
+}
+
+/* Special styling for homepage hero only */
+.index-background .hero {
+    height: calc(100vh - 200px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 /* Index page background */
@@ -334,7 +342,7 @@ img {
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    min-height: 100vh;
+    min-height: calc(100vh - 200px); /* Reduced height to show footer */
     display: flex;
     flex-direction: column;
 }
@@ -343,6 +351,27 @@ img {
 @media (max-width: 768px) {
     .index-background {
         background-attachment: scroll; /* Better performance on mobile */
+        min-height: calc(100vh - 180px); /* Even smaller on mobile */
+    }
+    
+    .index-background .hero {
+        height: calc(100vh - 180px);
+        padding-top: 80px; /* Smaller padding on mobile */
+        padding-bottom: 1rem;
+    }
+    
+    .hero h1 {
+        font-size: 1.8rem; /* Smaller heading on mobile */
+        margin-bottom: 0.5rem;
+    }
+    
+    .hero h2 {
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .hero p {
+        font-size: 1rem;
     }
 }
 
