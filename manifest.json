@@ -2,7 +2,7 @@
   "name": "Batt's Booking Buddy",
   "short_name": "Batt's Booking",
   "description": "Book professional table tennis lessons with Batt's Booking Buddy",
-  "start_url": "/",
+  "start_url": "/batts-booking-buddy/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#0e43ca",
