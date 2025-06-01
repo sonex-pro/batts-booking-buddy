@@ -507,17 +507,23 @@ img {
     .hero-buttons {
         justify-content: center;
         flex-wrap: wrap;
-        gap: 0.5rem;
+        gap: 8px;
         width: 100%;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        max-width: 350px;
+        margin: 0 auto;
     }
     
     .hero-buttons .btn {
-        min-width: 130px;
-        width: calc(50% - 1rem);
-        margin: 0.25rem;
+        min-width: auto;
+        width: auto;
+        margin: 0;
+        padding: 0.6rem 10px;
         text-align: center;
         display: flex;
         justify-content: center;
+        font-size: 0.9rem;
     }
 }
 
