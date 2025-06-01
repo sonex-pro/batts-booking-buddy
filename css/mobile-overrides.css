@@ -1,11 +1,21 @@
 /* Mobile overrides for better centering and button layout */
 @media (max-width: 768px) {
+    /* Improved hero section for mobile */
+    .index-background {
+        min-height: 100vh !important;
+        display: flex !important;
+        align-items: center !important;
+        padding-top: 70px !important; /* Account for header height */
+        padding-bottom: 40px !important;
+    }
+
     .hero-content {
         text-align: center !important;
         margin: 0 auto !important;
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
+        padding: 2rem 1rem !important;
     }
     
     .hero h1, .hero h2, .hero p {
@@ -51,14 +61,14 @@
     .index-background .hero {
         height: auto !important;
         min-height: unset !important;
-        padding-top: 70px !important;
-        padding-bottom: 20px !important;
+        padding-top: 0 !important; /* Reduced since we added padding to parent */
+        padding-bottom: 0 !important;
         position: relative !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
     }
-    
-    .hero-content {
-        padding: 1rem 0 !important;
-    }
+
     
     .hero h1 {
         font-size: 1.5rem !important;
@@ -85,9 +95,27 @@
     }
 }
 
+/* Tablet view improvements */
+@media (min-width: 769px) and (max-width: 992px) {
+    .index-background {
+        min-height: 90vh !important;
+        display: flex !important;
+        align-items: center !important;
+        padding: 80px 0 60px !important;
+    }
+    
+    .hero-content {
+        padding: 2rem !important;
+    }
+    
+    .hero h1 {
+        margin-bottom: 1rem !important;
+    }
+}
+
 /* Additional specific override for homepage hero buttons - added for proper bottom spacing */
 @media (max-width: 768px) {
     .index-background .hero-buttons .btn {
-        margin-bottom: 25px !important;
+        margin-bottom: 15px !important;
     }
 }
