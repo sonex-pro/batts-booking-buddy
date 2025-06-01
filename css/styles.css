@@ -447,6 +447,22 @@ img {
     }
 }
 
+/* Mobile landscape mode fix */
+@media (max-width: 768px) and (orientation: landscape) {
+    .index-background {
+        min-height: auto;
+    }
+    
+    .index-background .hero {
+        height: auto;
+        padding-bottom: 4rem; /* Add more space at bottom for buttons */
+    }
+    
+    .hero-content {
+        padding-bottom: 2rem;
+    }
+}
+
 /* Mobile background fix */
 @media (max-width: 768px) {
     .index-background {
@@ -484,10 +500,14 @@ img {
     
     .hero-buttons {
         justify-content: center;
+        flex-wrap: wrap;
+        gap: 0.8rem;
     }
     
     .hero-buttons .btn {
-        min-width: 200px;
+        min-width: auto;
+        padding-left: 1rem;
+        padding-right: 1rem;
     }
 }
 
