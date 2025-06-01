@@ -1,16 +1,33 @@
-/* Level Text Style */
-.level-text {
-    font-family: Georgia, serif;
-    font-size: 1rem;
-    color: #000000;
-    margin: 0.5rem 0;
-    display: inline-block;
-    padding: 4px 12px;
-    background-color: rgba(0, 0, 0, 0.1);
-    border-radius: 4px;
-}
+/*==================================================
+=            CSS TABLE OF CONTENTS            =
+====================================================
 
-/* Base Styles */
+1. VARIABLES & RESET
+2. TYPOGRAPHY & BASE STYLES
+3. BUTTONS & INTERACTIVE ELEMENTS
+4. LAYOUT COMPONENTS
+   4.1 Header & Navigation
+   4.2 Hero Sections
+   4.3 Content Sections
+   4.4 Cards & Grids
+   4.5 Forms & Inputs
+   4.6 Footer
+5. PAGE SPECIFIC STYLES
+   5.1 Home Page
+   5.2 Junior Coaching Page
+   5.3 Booking Pages
+   5.4 Contact Page
+6. UTILITY CLASSES
+7. MEDIA QUERIES
+   7.1 Desktop (992px+)
+   7.2 Tablet (768px - 991px)
+   7.3 Mobile (767px and below)
+
+==================================================*/
+
+/*==================================================
+1. VARIABLES & RESET
+==================================================*/
 :root {
     --primary: #2196F3;
     --primary-dark: #1976D2;
@@ -20,6 +37,11 @@
     --gray: #757575;
     --white: #ffffff;
     --shadow: 0 2px 4px rgba(0,0,0,0.1);
+    
+    /* Brand colors */
+    --brand-blue: #0e43ca;
+    --brand-light-blue: #e6f0ff;
+    --brand-dark: #181818;
 }
 
 * {
@@ -40,13 +62,9 @@ body {
     background-color: var(--white);
 }
 
-.container {
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1.5rem;
-}
-
+/*==================================================
+2. TYPOGRAPHY & BASE STYLES
+==================================================*/
 h1, h2, h3, h4, h5, h6 {
     margin-bottom: 1rem;
     line-height: 1.2;
@@ -71,7 +89,28 @@ img {
     height: auto;
 }
 
-/* Buttons */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+/* Level text style */
+.level-text {
+    font-family: Georgia, serif;
+    font-size: 1rem;
+    color: #000000;
+    margin: 0.5rem 0;
+    display: inline-block;
+    padding: 4px 12px;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
+
+/*==================================================
+3. BUTTONS & INTERACTIVE ELEMENTS
+==================================================*/
 .btn {
     display: inline-block;
     padding: 8px 2rem;
@@ -81,48 +120,87 @@ img {
     font-weight: 500;
     text-align: center;
     text-decoration: none;
-    background-color: #181818;
+    background-color: var(--brand-dark);
     color: #fff;
     cursor: pointer;
     transition: background 0.3s, color 0.3s;
-    font-family: 'Roboto', sans-serif; /* Ensure consistent font */
-    line-height: 1.2; /* Consistent line height */
-    box-sizing: border-box; /* Consistent box model */
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.2;
+    box-sizing: border-box;
 }
 
 .btn-primary {
-    background-color: #181818;
+    background-color: var(--brand-dark);
     color: #fff;
 }
 
-.btn-primary:hover, .btn-primary:focus {
+.btn-primary:hover, 
+.btn-primary:focus {
     background-color: #222;
 }
 
-.btn.disabled, .btn[aria-disabled="true"] {
+.btn.disabled, 
+.btn[aria-disabled="true"] {
     opacity: 0.5;
     cursor: not-allowed;
     pointer-events: none;
-    background-color: #181818;
+    background-color: var(--brand-dark);
     color: #fff;
 }
 
 .btn-black {
-    background-color: #181818;
+    background-color: var(--brand-dark);
     color: #fff;
     padding: 3px 1.5rem;
     box-shadow: 0 2px 6px rgba(0,0,0,0.12);
 }
 
-.btn-black:hover, .btn-black:focus {
-    background-color: #222;
+.btn-black:hover, 
+.btn-black:focus {
     background-color: #000;
     color: #fff;
     transform: translateY(-2px);
 }
 
+.btn-white {
+    background-color: white;
+    color: var(--brand-blue);
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 6px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
 
-/* Header */
+.btn-white:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.btn-white:active {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+}
+
+.btn-white[disabled] {
+    opacity: 0.7;
+    cursor: not-allowed;
+    background-color: rgba(255, 255, 255, 0.8);
+    color: #7a93d1;
+    border: 2px dashed #7a93d1;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transform: none;
+}
+
+/*==================================================
+4. LAYOUT COMPONENTS
+==================================================*/
+
+/*------------------
+4.1 Header & Navigation
+------------------*/
 .header {
     position: fixed;
     top: 0;
@@ -314,7 +392,7 @@ img {
 
 @media (max-width: 768px) {
     .logo-img {
-        height: 60px;
+        height: 55px;
         width: auto;
     }
 }
@@ -443,7 +521,7 @@ img {
 
 /* Page Hero Section */
 .page-hero {
-    margin-top: 8rem;
+    margin-top: 5.5rem; /* Reduced to match header height + padding */
     background-color: #0e43ca;
 }
 
