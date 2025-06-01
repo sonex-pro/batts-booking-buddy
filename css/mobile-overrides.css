@@ -1,9 +1,12 @@
 /* Mobile overrides for better centering and button layout */
 @media (max-width: 768px) {
-    /* Proper spacing for mobile */
+    /* Improved hero section for mobile */
     .index-background {
-        min-height: auto !important; /* Prevent footer from being pushed out */
-        padding-bottom: 20px !important;
+        min-height: 100vh !important;
+        display: flex !important;
+        align-items: center !important;
+        padding-top: 70px !important; /* Account for header height */
+        padding-bottom: 40px !important;
     }
 
     .hero-content {
@@ -58,16 +61,18 @@
     .index-background .hero {
         height: auto !important;
         min-height: unset !important;
-        padding-top: 30px !important; /* Add moderate top padding */
-        padding-bottom: 20px !important;
+        padding-top: 0 !important; /* Reduced since we added padding to parent */
+        padding-bottom: 0 !important;
         position: relative !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
     }
 
     
     .hero h1 {
         font-size: 1.5rem !important;
         margin-bottom: 0.5rem !important;
-        margin-top: 40px !important; /* Add moderate top margin to h1 */
     }
     
     .hero h2 {
@@ -90,24 +95,21 @@
     }
 }
 
-/* Tablet view improvements - moderate approach */
+/* Tablet view improvements */
 @media (min-width: 769px) and (max-width: 992px) {
     .index-background {
-        min-height: auto !important;
-        padding-bottom: 30px !important;
-    }
-    
-    .index-background .hero {
-        padding-top: 40px !important; /* Moderate top padding for tablet */
+        min-height: 90vh !important;
+        display: flex !important;
+        align-items: center !important;
+        padding: 80px 0 60px !important;
     }
     
     .hero-content {
-        padding: 1.5rem !important;
+        padding: 2rem !important;
     }
     
     .hero h1 {
         margin-bottom: 1rem !important;
-        margin-top: 20px !important;
     }
 }
 
