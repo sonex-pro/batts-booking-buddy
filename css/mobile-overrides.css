@@ -84,3 +84,10 @@
         bottom: auto !important;
     }
 }
+
+/* Additional specific override for homepage hero buttons - added for proper bottom spacing */
+@media (max-width: 768px) {
+    .index-background .hero-buttons .btn {
+        margin-bottom: 25px !important;
+    }
+}
