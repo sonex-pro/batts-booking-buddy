@@ -485,6 +485,14 @@ img {
     flex-wrap: wrap;
 }
 
+.hero-buttons .btn {
+    min-width: 180px;
+    text-align: center;
+    justify-content: center;
+    display: inline-flex;
+}
+
+
 .btn-white {
     background-color: white;
     color: #0e43ca;
