@@ -1295,7 +1295,7 @@ img {
 .footer {
     background-color: #181818;
     color: #fff;
-    padding: 0rem 0;
+    padding: 1rem 0;
     text-align: center;
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
 } 
@@ -1322,7 +1322,7 @@ img {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 1.5rem;
+    gap: 1rem;
     margin-bottom: 1rem;
 }
 
