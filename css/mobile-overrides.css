@@ -1,10 +1,9 @@
 /* Mobile overrides for better centering and button layout */
 @media (max-width: 768px) {
-    /* Simpler hero section for mobile with direct spacing */
+    /* Proper spacing for mobile */
     .index-background {
-        min-height: 100vh !important;
-        padding-top: 0 !important;
-        padding-bottom: 40px !important;
+        min-height: auto !important; /* Prevent footer from being pushed out */
+        padding-bottom: 20px !important;
     }
 
     .hero-content {
@@ -59,8 +58,8 @@
     .index-background .hero {
         height: auto !important;
         min-height: unset !important;
-        padding-top: 100px !important; /* Increased top padding */
-        padding-bottom: 40px !important;
+        padding-top: 30px !important; /* Add moderate top padding */
+        padding-bottom: 20px !important;
         position: relative !important;
     }
 
@@ -68,7 +67,7 @@
     .hero h1 {
         font-size: 1.5rem !important;
         margin-bottom: 0.5rem !important;
-        margin-top: 80px !important; /* Push content down from the top */
+        margin-top: 40px !important; /* Add moderate top margin to h1 */
     }
     
     .hero h2 {
@@ -91,24 +90,24 @@
     }
 }
 
-/* Tablet view improvements - simpler approach */
+/* Tablet view improvements - moderate approach */
 @media (min-width: 769px) and (max-width: 992px) {
     .index-background {
-        min-height: 90vh !important;
-        padding: 0 0 60px !important;
+        min-height: auto !important;
+        padding-bottom: 30px !important;
     }
     
     .index-background .hero {
-        padding-top: 120px !important; /* Increased top padding for tablet */
+        padding-top: 40px !important; /* Moderate top padding for tablet */
     }
     
     .hero-content {
-        padding: 2rem !important;
+        padding: 1.5rem !important;
     }
     
     .hero h1 {
         margin-bottom: 1rem !important;
-        margin-top: 30px !important;
+        margin-top: 20px !important;
     }
 }
 
