@@ -1291,14 +1291,21 @@ img {
     margin: 2rem auto;
 }
 
-/* Footer */
+/* Footer with responsive padding */
 .footer {
     background-color: #181818;
     color: #fff;
-    padding: 2rem 0;
+    padding: 1rem 0; /* 1rem for mobile */
     text-align: center;
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-} 
+}
+
+/* For tablets and up */
+@media (min-width: 768px) {
+    .footer {
+        padding: 3rem 0; /* 3rem for larger screens */
+    }
+}
 
 .footer p, .footer a {
     color: #fff;
