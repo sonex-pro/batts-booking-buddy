@@ -455,17 +455,31 @@ img {
 
 /* Mobile landscape mode fix */
 @media (max-width: 768px) and (orientation: landscape) {
+    html, body {
+        height: auto;
+        overflow-y: auto;
+    }
+    
     .index-background {
         min-height: auto;
+        height: auto;
+        position: relative;
+        background-attachment: scroll;
     }
     
     .index-background .hero {
         height: auto;
-        padding-bottom: 4rem; /* Add more space at bottom for buttons */
+        min-height: auto;
+        padding-top: 80px;
+        padding-bottom: 2rem;
     }
     
     .hero-content {
-        padding-bottom: 2rem;
+        padding-bottom: 1rem;
+    }
+    
+    .footer {
+        position: relative;
     }
 }
 

@@ -34,3 +34,53 @@
         font-size: 0.9rem !important;
     }
 }
+
+/* Mobile landscape view fixes - enable scrolling */
+@media (max-height: 450px) and (orientation: landscape) {
+    html, body {
+        height: auto !important;
+        overflow-y: auto !important;
+    }
+    
+    .index-background {
+        min-height: unset !important;
+        height: auto !important;
+        position: relative !important;
+    }
+    
+    .index-background .hero {
+        height: auto !important;
+        min-height: unset !important;
+        padding-top: 70px !important;
+        padding-bottom: 20px !important;
+        position: relative !important;
+    }
+    
+    .hero-content {
+        padding: 1rem 0 !important;
+    }
+    
+    .hero h1 {
+        font-size: 1.5rem !important;
+        margin-bottom: 0.5rem !important;
+    }
+    
+    .hero h2 {
+        font-size: 1rem !important;
+        margin-bottom: 0.5rem !important;
+    }
+    
+    .hero p {
+        font-size: 0.9rem !important;
+        margin-bottom: 0.75rem !important;
+    }
+    
+    .hero-buttons {
+        margin: 0.75rem auto !important;
+    }
+    
+    .footer {
+        position: relative !important;
+        bottom: auto !important;
+    }
+}
