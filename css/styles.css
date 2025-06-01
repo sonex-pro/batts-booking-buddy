@@ -425,6 +425,28 @@ img {
     flex-direction: column;
 }
 
+/* Tablet styles for hero section */
+@media (min-width: 769px) and (max-width: 992px) {
+    .hero-content {
+        text-align: center;
+        margin: 0 auto;
+    }
+    
+    .hero h1,
+    .hero h2,
+    .hero p {
+        text-align: center;
+    }
+    
+    .hero-buttons {
+        justify-content: center;
+    }
+    
+    .hero-buttons .btn {
+        min-width: 190px;
+    }
+}
+
 /* Mobile background fix */
 @media (max-width: 768px) {
     .index-background {
@@ -441,15 +463,31 @@ img {
     .hero h1 {
         font-size: 1.8rem; /* Smaller heading on mobile */
         margin-bottom: 0.5rem;
+        text-align: center;
     }
     
     .hero h2 {
         font-size: 1.2rem;
         margin-bottom: 0.5rem;
+        text-align: center;
     }
     
     .hero p {
         font-size: 1.1rem;
+        text-align: center;
+    }
+    
+    .hero-content {
+        text-align: center;
+        margin: 0 auto;
+    }
+    
+    .hero-buttons {
+        justify-content: center;
+    }
+    
+    .hero-buttons .btn {
+        min-width: 200px;
     }
 }
 
