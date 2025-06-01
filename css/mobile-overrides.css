@@ -27,7 +27,7 @@
         max-width: 155px !important;
         min-width: unset !important;
         padding: 8px 10px !important;
-        margin: 0 !important;
+        margin: 0 0 15px 0 !important; /* Add 15px bottom margin */
         text-align: center !important;
         display: block !important;
         box-sizing: border-box !important;
