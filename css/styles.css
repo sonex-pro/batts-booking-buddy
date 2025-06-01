@@ -499,9 +499,10 @@ img {
     .hero h1 {
         font-size: 1.8rem; /* Smaller heading on mobile */
         margin-bottom: 2rem;
+        margin-top: 1rem
         text-align: center;
     }
-    
+    -
     .hero h2 {
         font-size: 1.2rem;
         margin-bottom: 0.5rem;
@@ -1291,7 +1292,7 @@ img {
     margin: 2rem auto;
 }
 
-/* Footer with responsive padding */
+/* Footer with responsive padding - 3rem desktop, 1rem mobile */
 .footer {
     background-color: #181818;
     color: #fff;
