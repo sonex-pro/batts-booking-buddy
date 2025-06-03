@@ -24,7 +24,7 @@ function doPost(e) {
 
     // Add headers if they don't exist
     if (sheet.getLastRow() === 0) {
-      sheet.appendRow(['Group', 'Date', 'Player Name', 'Parent/Guardian', 'Paid']);
+      sheet.appendRow(['Group', 'Date', 'Player Name', 'Paid', 'Your Name']);
       sheet.getRange(1, 1, 1, 5).setFontWeight('bold');
     }
 
@@ -32,20 +32,19 @@ function doPost(e) {
 
     // Determine the date format to use based on booking type
     let dateToDisplay = '';
-    
     if (data.bookingType === 'monthly') {
       dateToDisplay = data.month || data.date || '';
     } else {
       dateToDisplay = data.shortDate || data.date || '';
     }
-    
-    // Append new booking data
+
+    // Append new booking data in correct column order
     sheet.appendRow([
       data.group || '',
       dateToDisplay,
       data.playerName || '',
-      data.yourName || '',
-      paymentAmount
+      paymentAmount,
+      data.yourName || ''
     ]);
 
     // Apply color to the group cell in the new row
@@ -86,5 +85,6 @@ function doPost(e) {
       .setMimeType(ContentService.MimeType.JSON);
   }
 }
+
 
 
