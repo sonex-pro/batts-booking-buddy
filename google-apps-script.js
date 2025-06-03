@@ -24,8 +24,8 @@ function doPost(e) {
 
     // Add headers if they don't exist
     if (sheet.getLastRow() === 0) {
-      sheet.appendRow(['Group', 'Date', 'Player Name', 'Paid']);
-      sheet.getRange(1, 1, 1, 4).setFontWeight('bold');
+      sheet.appendRow(['Group', 'Date', 'Player Name', 'Parent/Guardian', 'Paid']);
+      sheet.getRange(1, 1, 1, 5).setFontWeight('bold');
     }
 
     const paymentAmount = data.totalPrice ? `£${data.totalPrice}` : 'No';
@@ -44,6 +44,7 @@ function doPost(e) {
       data.group || '',
       dateToDisplay,
       data.playerName || '',
+      data.yourName || '',
       paymentAmount
     ]);
 
@@ -62,7 +63,7 @@ function doPost(e) {
 
     // Sort the sheet by Group (A), then Date (B)
     if (newRow > 1) {
-      sheet.getRange(2, 1, newRow - 1, 4).sort([{ column: 1 }, { column: 2 }]);
+      sheet.getRange(2, 1, newRow - 1, 5).sort([{ column: 1 }, { column: 2 }]);
     }
 
     Logger.log('Data successfully added.');
@@ -74,6 +75,7 @@ function doPost(e) {
         group: data.group,
         date: data.date,
         playerName: data.playerName,
+        yourName: data.yourName,
         paid: paymentAmount
       }
     })).setMimeType(ContentService.MimeType.JSON);
