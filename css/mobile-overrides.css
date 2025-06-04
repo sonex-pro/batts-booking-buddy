@@ -71,6 +71,27 @@
         bottom: auto !important;
         width: 100% !important;
     }
+    
+    /* Button adjustments for mobile */
+    .btn {
+        padding-left: 0.75rem !important;
+        padding-right: 0.75rem !important;
+    }
+    
+    /* Ensure form action buttons stay on one line */
+    .form-actions {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 0.5rem;
+    }
+    
+    .form-actions .btn {
+        flex: 1;
+        min-width: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 }
 
 /* Mobile landscape view fixes - enable scrolling */
