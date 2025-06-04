@@ -10,13 +10,15 @@
     
     #back-home-btn {
         display: block !important;
-        width: 40% !important;
-        margin-bottom: 12px !important;
+        width: 45% !important;
+        font-size: 1.1rem !important;
+        padding: 5px !important;
     }
     
     #checkout-btn {
         display: block !important;
-        width: 40% !important;
-        font-size: 1.0rem !important;
+        width: 45% !important;
+        font-size: 1.1rem !important;
+        padding: 5px !important;
     }
 }
