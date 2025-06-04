@@ -1,18 +1,22 @@
 /* Direct button fix for mobile view */
 @media screen and (max-width: 768px) {
     .form-actions {
-        display: block !important;
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        gap: 5px !important
+
     }
     
     #back-home-btn {
         display: block !important;
-        width: 50% !important;
+        width: 40% !important;
         margin-bottom: 12px !important;
     }
     
     #checkout-btn {
         display: block !important;
-        width: 50% !important;
-        font-size: 0.9rem !important;
+        width: 40% !important;
+        font-size: 1.0rem !important;
     }
 }
