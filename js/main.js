@@ -584,14 +584,14 @@ function displayBookingSummary() {
     // Display user details
     if (userDetails) {
         if (yourNameElement) {
-            yourNameElement.textContent = `Your Name: ${userDetails.yourName}`;
+            yourNameElement.textContent = `Card Holders Name: ${userDetails.yourName}`;
         }
         if (playerNameElement) {
             playerNameElement.textContent = `Player's Name: ${userDetails.playerName}`;
         }
     } else {
         if (yourNameElement) {
-            yourNameElement.textContent = 'Your Name: Not provided';
+            yourNameElement.textContent = 'Card Holders Name: Not provided';
         }
         if (playerNameElement) {
             playerNameElement.textContent = "Player's Name: Not provided";
