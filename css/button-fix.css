@@ -6,13 +6,13 @@
     
     #back-home-btn {
         display: block !important;
-        width: 100% !important;
+        width: 50% !important;
         margin-bottom: 12px !important;
     }
     
     #checkout-btn {
         display: block !important;
-        width: 100% !important;
+        width: 50% !important;
         font-size: 0.9rem !important;
     }
 }
