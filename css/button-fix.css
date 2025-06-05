@@ -17,7 +17,7 @@
     .form-actions #checkout-btn {
         display: block !important;
         width: 45% !important;
-        font-size: 3.0rem !important;
+        font-size: 1.1rem !important;
         margin-bottom: 0 !important;
     }
 }
