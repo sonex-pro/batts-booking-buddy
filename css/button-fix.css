@@ -1,4 +1,13 @@
 /* Direct button fix for mobile view */
+
+.discount-actions {
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+  justify-content: flex-start;
+  align-items: center;
+}
+
 @media screen and (max-width: 768px) {
     .form-actions {
         display: block !important;
