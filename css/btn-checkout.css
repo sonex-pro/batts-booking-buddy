@@ -1,6 +1,6 @@
 /* Dedicated style for the Checkout button */
 .btn-checkout {
-    font-size: 1.5rem !important;
+    font-size: 1.1rem !important;
     background-color: #14532d !important; /* Dark green */
     color: #fff !important;
 }
