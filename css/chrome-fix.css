@@ -1,0 +1,49 @@
+/* Chrome-specific fix for Honor phones */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  /* Target Chrome specifically */
+  html, body {
+    -webkit-text-size-adjust: 100%; /* Prevents Chrome from automatically adjusting text size */
+    text-size-adjust: 100%;
+  }
+
+  /* Force normal scaling */
+  body {
+    zoom: 1 !important;
+    -moz-transform: scale(1) !important;
+    -moz-transform-origin: 0 0 !important;
+    -o-transform: scale(1) !important;
+    -o-transform-origin: 0 0 !important;
+    -webkit-transform: scale(1) !important;
+    -webkit-transform-origin: 0 0 !important;
+    transform: scale(1) !important;
+    transform-origin: 0 0 !important;
+  }
+}
+
+/* Fix for Honor specific Android Chrome browser */ 
+@media screen and (max-width: 768px) {
+  body {
+    /* Force normal size on problematic browsers */
+    min-width: initial !important;
+    width: 100% !important;
+    margin: 0 !important; 
+    padding: 0 !important;
+  }
+
+  /* Make text more readable */
+  h1, h2, h3 {
+    font-size: 110% !important;
+  }
+
+  p, li, a, button {
+    font-size: 100% !important;
+  }
+
+  /* Ensure cards display at proper size */
+  .card, .session-card {
+    min-width: 280px !important;
+    max-width: 100% !important;
+    width: auto !important;
+    transform: none !important;
+  }
+}
