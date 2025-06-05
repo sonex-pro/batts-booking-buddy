@@ -9,14 +9,13 @@
         align-items: center !important;
     }
     
-    #back-home-btn, #checkout-btn {
+    #back-home-btn {
         display: block !important;
         width: 45% !important;
-        min-width: 120px !important;
-        padding: 8px 5px !important;
-        font-size: 1rem !important;
-        line-height: 1.2 !important;
-        margin: 0 !important;
-        text-align: center !important;
+    }
+    #checkout-btn {
+        display: block !important;
+        width: 45% !important;
+        font-size: 3.0rem !important;
     }
 }
