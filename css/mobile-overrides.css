@@ -74,15 +74,15 @@
     
     /* Button adjustments for mobile */
     .btn {
-        padding-left: 0.75rem !important;
-        padding-right: 0.75rem !important;
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
     }
     
     /* Specific styling for checkout button to make it fit on mobile */
     #checkout-btn {
-        padding-left: 0.5rem !important;
-        padding-right: 0.5rem !important;
-        font-size: 0.9rem !important;
+        padding-left: 0.4rem !important;
+        padding-right: 0.4rem !important;
+        font-size: 1rem !important;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
