@@ -15,7 +15,7 @@
     }
     .discount-actions .btn {
         margin: 0 !important;
-        padding: 0 !important;
+        padding: 8px 0 !important; /* 8px top/bottom, 0 left/right */
         box-sizing: border-box !important;
         min-width: 0 !important;
         min-height: 0 !important;
