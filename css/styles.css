@@ -487,11 +487,11 @@ img {
 @media (max-width: 768px) {
     .index-background {
         background-attachment: scroll; /* Better performance on mobile */
-        min-height: calc(100vh - 180px); /* Even smaller on mobile */
+        /* Removing fixed height calculations to let mobile-overrides.css handle sizing */
     }
     
     .index-background .hero {
-        height: calc(100vh - 180px);
+        /* Removing fixed height calculations to prevent conflicts */
         padding-top: 80px; /* Smaller padding on mobile */
         padding-bottom: 1rem;
     }

@@ -89,41 +89,39 @@
     }
     
     /* Complete button layout revision for mobile - force complete separation */
-    @media (max-width: 768px) {
-        .form-actions {
-            display: block !important;
-            width: 100% !important;
-            margin-top: 15px !important;
-            flex-direction: column !important;
-        }
-        
-        .form-actions .btn {
-            display: block !important;
-            width: 100% !important;
-            margin: 0 !important;
-            text-align: center !important;
-            box-sizing: border-box !important;
-            max-width: none !important;
-            flex: none !important;
-        }
-        
-        /* Explicit styling with max specificity */
-        body .form-actions #back-home-btn {
-            margin-bottom: 12px !important;
-            border-bottom: 2px solid transparent !important;
-            display: block !important;
-            float: none !important;
-            clear: both !important;
-        }
-        
-        body .form-actions #checkout-btn {
-            padding-left: 0.5rem !important;
-            padding-right: 0.5rem !important;
-            font-size: 0.9rem !important;
-            display: block !important;
-            float: none !important;
-            clear: both !important;
-        }
+    .form-actions {
+        display: block !important;
+        width: 100% !important;
+        margin-top: 15px !important;
+        flex-direction: column !important;
+    }
+    
+    .form-actions .btn {
+        display: block !important;
+        width: 100% !important;
+        margin: 0 !important;
+        text-align: center !important;
+        box-sizing: border-box !important;
+        max-width: none !important;
+        flex: none !important;
+    }
+    
+    /* Explicit styling with max specificity */
+    body .form-actions #back-home-btn {
+        margin-bottom: 12px !important;
+        border-bottom: 2px solid transparent !important;
+        display: block !important;
+        float: none !important;
+        clear: both !important;
+    }
+    
+    body .form-actions #checkout-btn {
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
+        font-size: 0.9rem !important;
+        display: block !important;
+        float: none !important;
+        clear: both !important;
     }
 }
 
