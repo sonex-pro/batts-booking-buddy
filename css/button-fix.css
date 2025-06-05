@@ -12,10 +12,12 @@
     #back-home-btn {
         display: block !important;
         width: 45% !important;
+        margin-bottom: 0.0rem !important;
     }
-    #checkout-btn {
+    .form-actions #checkout-btn {
         display: block !important;
         width: 45% !important;
         font-size: 3.0rem !important;
+        margin-bottom: 0 !important;
     }
 }
