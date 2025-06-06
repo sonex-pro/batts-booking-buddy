@@ -21,8 +21,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <script src="https://js.stripe.com/v3/"></script>
-    <!-- Import secure API functions -->
-    <script src="js/secure-api.js"></script>
 </head>
 <body>
     <!-- Header -->
@@ -230,31 +228,28 @@
                     // Create a Netlify function endpoint for creating a payment session
                     let session;
                     try {
-                        // Use our new secure serverless function for creating a checkout
-                        console.log('Creating secure checkout with server-side validation');
+                        // Use the full URL to the Netlify function
+                        const functionUrl = 'https://cbjsonex.netlify.app/.netlify/functions/create-checkout-session';
+                        console.log('Calling function at:', functionUrl);
                         
-                        // Create a secure booking through our server-side API
-                        const bookingData = {
-                            level: paymentData.group,
-                            plan: paymentData.plan,
-                            month: paymentData.date, // For monthly bookings
-                            date: paymentData.date,  // For single sessions
-                            discountCode: paymentData.discountCode === 'SIB' ? 'SIB' : null,
-                            playerName: paymentData.playerName,
-                            bookerName: paymentData.yourName
-                        };
+                        const response = await fetch(functionUrl, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(paymentData)
+                        });
                         
-                        // Use the local function we created
-                        const secureCheckoutSession = await createSecureBooking(bookingData);
-                        console.log('Secure session created:', secureCheckoutSession);
+                        console.log('Response status:', response.status);
                         
-                        session = secureCheckoutSession;
-                        
-                        // If we got a direct URL instead of just a session ID, redirect directly
-                        if (session.url) {
-                            window.location.href = session.url;
-                            return; // Stop execution if redirecting directly
+                        if (!response.ok) {
+                            const errorText = await response.text();
+                            console.error('Error response:', errorText);
+                            throw new Error(`Network response was not ok: ${response.status} ${errorText}`);
                         }
+                        
+                        session = await response.json();
+                        console.log('Session created:', session);
                     } catch (fetchError) {
                         console.error('Fetch error:', fetchError);
                         throw fetchError;
