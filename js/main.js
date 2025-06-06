@@ -1,3 +1,5 @@
+// Note: Secure API functions have been moved to secure-api.js
+
 // Mobile menu toggle
 document.addEventListener('DOMContentLoaded', function() {
     const menuToggle = document.querySelector('.menu-toggle');
@@ -36,61 +38,85 @@ document.addEventListener('DOMContentLoaded', function() {
     if (monthSelects.length > 0) {
         populateMonthOptions(monthSelects);
         
-        // Add event listeners to month selects
-        monthSelects.forEach(select => {
-            select.addEventListener('change', function() {
-                const selectedMonth = this.value;
-                const price = this.getAttribute('data-price');
-                const plan = this.getAttribute('data-plan');
-                
-                if (selectedMonth) {
-                    // Disable other dropdowns
-                    monthSelects.forEach(otherSelect => {
-                        if (otherSelect !== this) {
-                            otherSelect.disabled = true;
-                            otherSelect.parentElement.classList.add('disabled');
+        // Detect what level page we're on
+        let skillLevel = 'beginner'; // Default
+        if (window.location.pathname.includes('intermediate.html')) {
+            skillLevel = 'intermediate';
+        } else if (window.location.pathname.includes('advanced.html')) {
+            skillLevel = 'advanced';
+        }
+        
+        // Load secure pricing from server
+        getSecurePricing(skillLevel).then(pricing => {
+            console.log('Secure pricing loaded for ' + skillLevel);
+            
+            // Add event listeners to month selects
+            monthSelects.forEach(select => {
+                select.addEventListener('change', function() {
+                    const selectedMonth = this.value;
+                    const plan = this.getAttribute('data-plan');
+                    
+                    // Determine price from server-side data, not HTML attributes
+                    let price;
+                    if (plan === 'Single sessions') {
+                        price = pricing.singleSession;
+                    } else if (plan === '1 session per week') {
+                        price = pricing.monthlyOneSession;
+                    } else if (plan === '3 sessions per week') {
+                        price = pricing.monthlyThreeSessions;
+                    }
+                    
+                    if (selectedMonth) {
+                        // Disable other dropdowns
+                        monthSelects.forEach(otherSelect => {
+                            if (otherSelect !== this) {
+                                otherSelect.disabled = true;
+                                otherSelect.parentElement.classList.add('disabled');
+                            }
+                        });
+                        
+                        // Disable show calendar button if exists
+                        const calendarBtn = document.getElementById('show-calendar-btn');
+                        if (calendarBtn) {
+                            calendarBtn.disabled = true;
+                            calendarBtn.classList.add('disabled');
                         }
-                    });
-                    
-                    // Disable show calendar button if exists
-                    const calendarBtn = document.getElementById('show-calendar-btn');
-                    if (calendarBtn) {
-                        calendarBtn.disabled = true;
-                        calendarBtn.classList.add('disabled');
+                        
+                        // Save booking data to localStorage WITH secure price from server
+                        saveBookingData(selectedMonth, price, plan, skillLevel);
+                        
+                        // Enable the next button
+                        const nextButton = document.getElementById('next-button');
+                        if (nextButton) {
+                            nextButton.classList.add('active');
+                            nextButton.classList.remove('disabled');
+                            nextButton.setAttribute('aria-disabled', 'false');
+                        }
+                    } else {
+                        // If no option is selected, enable all dropdowns
+                        monthSelects.forEach(otherSelect => {
+                            otherSelect.disabled = false;
+                            otherSelect.parentElement.classList.remove('disabled');
+                        });
+                        
+                        // Enable show calendar button if exists
+                        const calendarBtn = document.getElementById('show-calendar-btn');
+                        if (calendarBtn) {
+                            calendarBtn.disabled = false;
+                            calendarBtn.classList.remove('disabled');
+                        }
+                        // Disable the next button
+                        const nextButton = document.getElementById('next-button');
+                        if (nextButton) {
+                            nextButton.classList.remove('active');
+                            nextButton.classList.add('disabled');
+                            nextButton.setAttribute('aria-disabled', 'true');
+                        }
                     }
-                    
-                    // Save booking data to localStorage
-                    saveBookingData(selectedMonth, price, plan);
-                    
-                    // Enable the next button
-                    const nextButton = document.getElementById('next-button');
-                    if (nextButton) {
-                        nextButton.classList.add('active');
-                        nextButton.classList.remove('disabled');
-                        nextButton.setAttribute('aria-disabled', 'false');
-                    }
-                } else {
-                    // If no option is selected, enable all dropdowns
-                    monthSelects.forEach(otherSelect => {
-                        otherSelect.disabled = false;
-                        otherSelect.parentElement.classList.remove('disabled');
-                    });
-                    
-                    // Enable show calendar button if exists
-                    const calendarBtn = document.getElementById('show-calendar-btn');
-                    if (calendarBtn) {
-                        calendarBtn.disabled = false;
-                        calendarBtn.classList.remove('disabled');
-                    }
-                    // Disable the next button
-                    const nextButton = document.getElementById('next-button');
-                    if (nextButton) {
-                        nextButton.classList.remove('active');
-                        nextButton.classList.add('disabled');
-                        nextButton.setAttribute('aria-disabled', 'true');
-                    }
-                }
+                });
             });
+        }).catch(error => {
+            console.error('Error loading pricing:', error);
         });
     }
     
@@ -111,12 +137,20 @@ document.addEventListener('DOMContentLoaded', function() {
         const customCalendar = document.querySelector('.custom-calendar');
         
         if (customCalendar) {
+            // Detect what level page we're on for secure pricing
+            let skillLevel = 'beginner'; // Default
+            if (window.location.pathname.includes('intermediate.html')) {
+                skillLevel = 'intermediate';
+            } else if (window.location.pathname.includes('advanced.html')) {
+                skillLevel = 'advanced';
+            }
+            
             // Initialize calendar when button is clicked
             showCalendarBtn.addEventListener('click', function() {
                 if (calendarWrapper) {
                     calendarWrapper.classList.toggle('hidden');
                     
-                    // If showing calendar, disable month dropdowns and initialize calendar
+                    // If showing calendar, disable month dropdowns and initialize calendar with secure pricing
                     if (!calendarWrapper.classList.contains('hidden')) {
                         const monthSelects = document.querySelectorAll('.month-select');
                         monthSelects.forEach(select => {
@@ -124,8 +158,24 @@ document.addEventListener('DOMContentLoaded', function() {
                             select.parentElement.classList.add('disabled');
                         });
                         
-                        // Initialize calendar if not already initialized
-                        initCalendar(customCalendar, showCalendarBtn.getAttribute('data-price'), showCalendarBtn.getAttribute('data-plan'));
+                        // Get secure pricing from server
+                        getSecurePricing(skillLevel).then(pricing => {
+                            // Initialize calendar with secure price, not from HTML attribute
+                            const plan = showCalendarBtn.getAttribute('data-plan');
+                            const securePrice = pricing.singleSession;
+                            
+                            // Initialize calendar with secure pricing
+                            initCalendar(customCalendar, securePrice, plan, skillLevel);
+                        }).catch(error => {
+                            console.error('Error loading calendar pricing:', error);
+                            // Fallback to attribute-based pricing only in case of API failure
+                            initCalendar(
+                                customCalendar, 
+                                showCalendarBtn.getAttribute('data-price'), 
+                                showCalendarBtn.getAttribute('data-plan'),
+                                skillLevel
+                            );
+                        });
                     }
                 }
             });
@@ -133,7 +183,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Function to initialize the custom calendar
-    function initCalendar(calendarElement, price, plan) {
+    function initCalendar(calendarElement, price, plan, skillLevel = 'beginner') {
         const currentMonthElement = calendarElement.querySelector('.current-month');
         const daysContainer = calendarElement.querySelector('.days');
         const prevMonthBtn = calendarElement.querySelector('.prev-month');
@@ -428,7 +478,7 @@ function populateMonthOptions(selectElements) {
 }
 
 // Function to save booking data to localStorage
-function saveBookingData(month, price, plan) {
+function saveBookingData(month, price, plan, skillLevel = 'beginner') {
     // For monthly bookings, we want to keep the month and year format (e.g., 'June 2025')
     // We don't need to convert it to a short date format
     
@@ -439,15 +489,15 @@ function saveBookingData(month, price, plan) {
         shortDate: '', // Leave this empty for monthly bookings to use the month name
         price: price,
         plan: plan,
-        skillLevel: getSkillLevelFromPage(),
-        bookingType: 'monthly'
+        skillLevel: skillLevel,
+        date: null // For individual sessions
     };
     
     localStorage.setItem('bookingData', JSON.stringify(bookingData));
 }
 
 // Function to save session data to localStorage
-function saveSessionData(dateComponents, price, plan) {
+function saveSessionData(dateComponents, price, plan, skillLevel = 'beginner') {
     // Create Date object from components - this avoids timezone issues
     // Note: JavaScript months are 0-indexed (0 = January, 11 = December)
     const selectedDate = new Date(
@@ -479,11 +529,11 @@ function saveSessionData(dateComponents, price, plan) {
     
     const bookingData = {
         date: formattedDate,
-        shortDate: shortDate,
-        rawDate: rawDateStr, // Store raw date for reference
+        shortDate: shortFormatDate,
+        rawDate: rawDateStr,
         price: price,
         plan: plan,
-        skillLevel: getSkillLevelFromPage(),
+        skillLevel: skillLevel,
         bookingType: 'single'
     };
     

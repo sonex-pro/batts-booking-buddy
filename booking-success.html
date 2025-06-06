@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Successful | Batt's Booking Buddy</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link rel="apple-touch-icon" href="images/webclip.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Batt's Booking">
+    <meta name="theme-color" content="#0e43ca">
+    <link rel="manifest" href="manifest.json">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <a href="index.html#home">
+                    <img src="images/logo.webp" alt="Batt's Booking Buddy Logo" class="logo-img">
+                </a>
+            </div>
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="index.html#home" class="nav-link">Home</a></li>
+                    <li class="nav-item"><a href="Junior-Coaching.html" class="nav-link">Junior Coaching</a></li>
+                    <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+                </ul>
+            </nav>
+            <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+    <main>
+        <section class="success-section">
+            <div class="container">
+                <div class="success-content">
+                    <h1>Booking Successful!</h1>
+                    <div class="success-icon">✓</div>
+                    <p>Thank you for your booking. Your table tennis session has been confirmed!</p>
+                    <div id="booking-details" class="booking-details">
+                        <h2>Booking Details</h2>
+                        <div id="booking-info">
+                            <!-- Details will be loaded here -->
+                        </div>
+                    </div>
+                    <p>An email confirmation has been sent to your provided email address.</p>
+                    <div class="action-buttons">
+                        <a href="index.html" class="btn btn-primary">Return to Home</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-links">
+                <p>Quick Links:</p>
+                <a href="https://www.battsharlow.com/" target="_blank">Batts Table Tennis Club</a>
+                <a href="https://stripe.com/gb/resources/more/secure-payment-systems-explained" target="_blank">Stripe Secure Payments</a>
+                <a href="mailto:cbj.uk.design@gmail.com">cbj-uk-design</a>
+            </div>
+            <p>&copy; 2025 cbj-uk-design. All rights reserved.</p>
+        </div>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get session ID from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const sessionId = urlParams.get('session_id');
+            
+            // Clear localStorage since payment is complete
+            localStorage.removeItem('bookingData');
+            localStorage.removeItem('userDetails');
+            
+            // Mobile menu toggle
+            const menuToggle = document.querySelector('.menu-toggle');
+            const nav = document.querySelector('.nav');
+            if (menuToggle && nav) {
+                menuToggle.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                    nav.classList.toggle('active');
+                    const expanded = this.classList.contains('active');
+                    this.setAttribute('aria-expanded', expanded);
+                    document.body.style.overflow = expanded ? 'hidden' : '';
+                });
+            }
+        });
+    </script>
+</body>
+</html>
