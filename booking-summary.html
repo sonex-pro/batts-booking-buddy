@@ -21,6 +21,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <script src="https://js.stripe.com/v3/"></script>
+    <!-- Secure API for server-side price verification -->
+    <script src="js/secure-api.js"></script>
 </head>
 <body>
     <!-- Header -->
@@ -133,48 +135,77 @@
             const discountAmountValue = document.getElementById('discount-amount-value');
             const totalPriceValue = document.getElementById('total-price-value');
             
-            applyDiscountBtn.addEventListener('click', function() {
-                const discountCode = discountCodeInput.value.trim().toUpperCase();
-                const originalPrice = parseFloat(originalPriceValue.textContent);
+            applyDiscountBtn.addEventListener('click', async function() {
+                // Disable button during processing
+                applyDiscountBtn.disabled = true;
+                applyDiscountBtn.textContent = 'Processing...';
                 
-                if (isNaN(originalPrice)) {
-                    alert('Error: Invalid price value');
-                    return;
-                }
-                
-                if (discountCode === 'SIB') {
-                    // Apply 50% sibling discount
-                    const discountAmount = originalPrice * 0.5;
-                    const discountedPrice = originalPrice - discountAmount;
+                try {
+                    const discountCode = discountCodeInput.value.trim().toUpperCase();
+                    const bookingData = JSON.parse(localStorage.getItem('bookingData'));
                     
-                    // Display discount amount
-                    discountAmountElement.style.display = 'block';
-                    discountAmountValue.textContent = discountAmount.toFixed(2);
-                    totalPriceValue.textContent = discountedPrice.toFixed(2);
+                    if (!bookingData) {
+                        alert('Error: Missing booking data');
+                        return;
+                    }
                     
-                    // Save discount to localStorage
-                    localStorage.setItem('discountCode', discountCode);
-                    localStorage.setItem('discountAmount', discountAmount.toFixed(2));
-                    localStorage.setItem('totalPrice', discountedPrice.toFixed(2));
-                } else if (discountCode === '') {
-                    // Reset to original price if discount code is cleared
-                    discountAmountElement.style.display = 'none';
-                    totalPriceValue.textContent = originalPrice.toFixed(2);
+                    // Get secure pricing from the server
+                    const priceInfo = await getSecurePricing(
+                        bookingData.skillLevel,
+                        bookingData.plan,
+                        discountCode
+                    );
                     
-                    // Remove discount from localStorage
-                    localStorage.removeItem('discountCode');
-                    localStorage.removeItem('discountAmount');
-                    localStorage.setItem('totalPrice', originalPrice.toFixed(2));
-                } else {
-                    // Invalid discount code
-                    alert('Invalid discount code');
-                    discountAmountElement.style.display = 'none';
-                    totalPriceValue.textContent = originalPrice.toFixed(2);
+                    // Update display with server-verified pricing
+                    originalPriceValue.textContent = priceInfo.originalPrice;
                     
-                    // Remove discount from localStorage
-                    localStorage.removeItem('discountCode');
-                    localStorage.removeItem('discountAmount');
-                    localStorage.setItem('totalPrice', originalPrice.toFixed(2));
+                    const discountAmount = parseFloat(priceInfo.discountAmount);
+                    if (discountAmount > 0) {
+                        // Display discount amount
+                        discountAmountElement.style.display = 'block';
+                        discountAmountValue.textContent = priceInfo.discountAmount;
+                        totalPriceValue.textContent = priceInfo.finalPrice;
+                        
+                        // Save discount to localStorage
+                        if (discountCode) {
+                            localStorage.setItem('discountCode', discountCode);
+                        } else {
+                            localStorage.removeItem('discountCode');
+                        }
+                    } else {
+                        // No discount applied
+                        discountAmountElement.style.display = 'none';
+                        totalPriceValue.textContent = priceInfo.originalPrice;
+                        
+                        // Remove discount from localStorage
+                        localStorage.removeItem('discountCode');
+                    }
+                } catch (error) {
+                    console.error('Error applying discount:', error);
+                    alert('Error applying discount: ' + error.message);
+                    
+                    // Fallback to original behavior if server verification fails
+                    const discountCode = discountCodeInput.value.trim().toUpperCase();
+                    const originalPrice = parseFloat(originalPriceValue.textContent);
+                    
+                    if (discountCode === 'SIB') {
+                        const discountAmount = originalPrice * 0.5;
+                        const discountedPrice = originalPrice - discountAmount;
+                        
+                        discountAmountElement.style.display = 'block';
+                        discountAmountValue.textContent = discountAmount.toFixed(2);
+                        totalPriceValue.textContent = discountedPrice.toFixed(2);
+                        
+                        localStorage.setItem('discountCode', discountCode);
+                    } else {
+                        discountAmountElement.style.display = 'none';
+                        totalPriceValue.textContent = originalPrice.toFixed(2);
+                        localStorage.removeItem('discountCode');
+                    }
+                } finally {
+                    // Re-enable button
+                    applyDiscountBtn.disabled = false;
+                    applyDiscountBtn.textContent = 'Apply Sibling Code';
                 }
             });
             
@@ -203,57 +234,26 @@
                     // Get booking data
                     const bookingData = JSON.parse(localStorage.getItem('bookingData'));
                     const userDetails = JSON.parse(localStorage.getItem('userDetails'));
-                    const totalPrice = localStorage.getItem('totalPrice') || (bookingData ? bookingData.price : '0.00');
+                    const discountCode = localStorage.getItem('discountCode') || '';
                     
                     if (!bookingData || !userDetails) {
                         throw new Error('Missing booking or user details');
                     }
                     
-                    // Prepare data for the server
-                    const paymentData = {
-                        group: bookingData.skillLevel || 'Not specified',
-                        date: bookingData.date || bookingData.month || 'Not specified',
-                        shortDate: bookingData.shortDate || '', // Add short date format (DD/MM/YY) for Google Sheet
-                        rawDate: bookingData.rawDate || '', // Add raw date for accurate date tracking
-                        playerName: userDetails.playerName || 'Not specified',
-                        totalPrice: parseFloat(totalPrice).toFixed(2),
-                        bookingType: bookingData.bookingType || 'Not specified',
-                        plan: bookingData.plan || 'Not specified',
-                        yourName: userDetails.yourName || 'Not specified',
-                        discountCode: localStorage.getItem('discountCode') || 'None'
+                    // Create a secure booking using our secure API that validates prices server-side
+                    // This prevents any price manipulation in localStorage
+                    const combinedData = {
+                        ...bookingData,
+                        ...userDetails,
+                        discountCode: discountCode
                     };
                     
-                    console.log('Sending payment data to Netlify function:', paymentData);
+                    console.log('Creating secure booking with server-side price validation');
                     
-                    // Create a Netlify function endpoint for creating a payment session
-                    let session;
-                    try {
-                        // Use the full URL to the Netlify function
-                        const functionUrl = 'https://cbjsonex.netlify.app/.netlify/functions/create-checkout-session';
-                        console.log('Calling function at:', functionUrl);
-                        
-                        const response = await fetch(functionUrl, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify(paymentData)
-                        });
-                        
-                        console.log('Response status:', response.status);
-                        
-                        if (!response.ok) {
-                            const errorText = await response.text();
-                            console.error('Error response:', errorText);
-                            throw new Error(`Network response was not ok: ${response.status} ${errorText}`);
-                        }
-                        
-                        session = await response.json();
-                        console.log('Session created:', session);
-                    } catch (fetchError) {
-                        console.error('Fetch error:', fetchError);
-                        throw fetchError;
-                    }
+                    // Call our secure booking function that handles price verification
+                    // and creates a Stripe session
+                    const session = await createSecureBooking(combinedData);
+                    console.log('Secure session created:', session);
                     
                     // Redirect to Stripe Checkout
                     const result = await stripe.redirectToCheckout({

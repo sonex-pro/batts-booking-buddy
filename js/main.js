@@ -432,12 +432,15 @@ function saveBookingData(month, price, plan) {
     // For monthly bookings, we want to keep the month and year format (e.g., 'June 2025')
     // We don't need to convert it to a short date format
     
+    // SECURITY UPDATE: We no longer store the actual price in localStorage
+    // to prevent client-side manipulation. We'll use the server to determine price.
+    // We still keep the old price field for backward compatibility
     const bookingData = {
         month: month,
         // For monthly bookings, we'll use the month name directly instead of a short date
         // This ensures the Google Sheet shows 'June 2025' instead of '01/06/25'
         shortDate: '', // Leave this empty for monthly bookings to use the month name
-        price: price,
+        price: price, // Kept for backward compatibility only, will be verified server-side
         plan: plan,
         skillLevel: getSkillLevelFromPage(),
         bookingType: 'monthly'
@@ -502,7 +505,7 @@ function saveUserDetails(yourName, playerName) {
 }
 
 // Function to display booking summary
-function displayBookingSummary() {
+async function displayBookingSummary() {
     // Get elements
     const bookingDetailsElement = document.getElementById('booking-details');
     const yourNameElement = document.getElementById('your-name-display');
@@ -520,8 +523,6 @@ function displayBookingSummary() {
     const bookingData = JSON.parse(localStorage.getItem('bookingData'));
     const userDetails = JSON.parse(localStorage.getItem('userDetails'));
     const discountCode = localStorage.getItem('discountCode');
-    const discountAmount = localStorage.getItem('discountAmount');
-    const totalPrice = localStorage.getItem('totalPrice');
     
     // Display booking details
     if (bookingData) {
@@ -542,33 +543,77 @@ function displayBookingSummary() {
         
         document.getElementById('booking-type').textContent = `Booking Type: ${bookingType}`;
         
-        // Set original price - ensure it's a valid number
-        if (originalPriceElement) {
-            const price = parseFloat(bookingData.price);
-            originalPriceElement.textContent = price.toFixed(2);
+        try {
+            // Get secure pricing from server instead of using localStorage
+            // This prevents client-side price manipulation
+            if (typeof window.getSecurePricing === 'function') {
+                const priceInfo = await window.getSecurePricing(
+                    bookingData.skillLevel,
+                    bookingData.plan,
+                    discountCode || ''
+                );
+                
+                // Update UI with server-verified prices
+                if (originalPriceElement) {
+                    originalPriceElement.textContent = priceInfo.originalPrice;
+                }
+                
+                if (totalPriceElement) {
+                    totalPriceElement.textContent = priceInfo.finalPrice;
+                }
+                
+                // Display discount if applied
+                if (parseFloat(priceInfo.discountAmount) > 0) {
+                    if (discountAmountElement) discountAmountElement.style.display = 'block';
+                    if (discountAmountValue) discountAmountValue.textContent = priceInfo.discountAmount;
+                    if (discountCodeInput) discountCodeInput.value = discountCode || '';
+                } else {
+                    // Hide discount section if no discount is applied
+                    if (discountAmountElement) discountAmountElement.style.display = 'none';
+                }
+            } else {
+                // Fallback to legacy code if secure API is not available
+                console.warn('Secure pricing API not available, using fallback pricing');
+                fallbackDisplayPricing();
+            }
+        } catch (error) {
+            console.error('Error getting secure pricing:', error);
+            // Fallback to legacy price display if API fails
+            fallbackDisplayPricing();
+        }
+        
+        // Legacy fallback function for backward compatibility
+        function fallbackDisplayPricing() {
+            // Set original price - ensure it's a valid number
+            if (originalPriceElement) {
+                const price = parseFloat(bookingData.price);
+                originalPriceElement.textContent = price.toFixed(2);
+                
+                // If no discount has been applied yet, set the total price to the original price
+                if (!localStorage.getItem('totalPrice') && totalPriceElement) {
+                    totalPriceElement.textContent = price.toFixed(2);
+                }
+            }
             
-            // If no discount has been applied yet, set the total price to the original price
-            if (!totalPrice && totalPriceElement) {
-                totalPriceElement.textContent = price.toFixed(2);
+            // Set total price if it exists in localStorage
+            const storedTotalPrice = localStorage.getItem('totalPrice');
+            if (storedTotalPrice && totalPriceElement) {
+                totalPriceElement.textContent = parseFloat(storedTotalPrice).toFixed(2);
             }
-        }
-        
-        // Set total price if it exists in localStorage
-        if (totalPrice && totalPriceElement) {
-            totalPriceElement.textContent = parseFloat(totalPrice).toFixed(2);
-        }
-        
-        // Display discount if applied
-        if (discountCode && discountCode === 'SIB' && discountAmountElement && discountAmountValue) {
-            discountAmountElement.style.display = 'block';
-            discountAmountValue.textContent = parseFloat(discountAmount).toFixed(2);
-            if (discountCodeInput) {
-                discountCodeInput.value = discountCode;
-            }
-        } else {
-            // Hide discount section if no discount is applied
-            if (discountAmountElement) {
-                discountAmountElement.style.display = 'none';
+            
+            // Display discount if applied
+            const storedDiscountAmount = localStorage.getItem('discountAmount');
+            if (discountCode && discountCode === 'SIB' && discountAmountElement && discountAmountValue) {
+                discountAmountElement.style.display = 'block';
+                discountAmountValue.textContent = parseFloat(storedDiscountAmount).toFixed(2);
+                if (discountCodeInput) {
+                    discountCodeInput.value = discountCode;
+                }
+            } else {
+                // Hide discount section if no discount is applied
+                if (discountAmountElement) {
+                    discountAmountElement.style.display = 'none';
+                }
             }
         }
     } else {
