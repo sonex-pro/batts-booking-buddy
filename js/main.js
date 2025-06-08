@@ -547,11 +547,19 @@ async function displayBookingSummary() {
             // Get secure pricing from server instead of using localStorage
             // This prevents client-side price manipulation
             if (typeof window.getSecurePricing === 'function') {
+                console.log('Requesting secure pricing with:', {
+                    skillLevel: bookingData.skillLevel,
+                    plan: bookingData.plan,
+                    discountCode: discountCode || ''
+                });
+                
                 const priceInfo = await window.getSecurePricing(
                     bookingData.skillLevel,
                     bookingData.plan,
                     discountCode || ''
                 );
+                
+                console.log('Received price info:', priceInfo);
                 
                 // Update UI with server-verified prices
                 if (originalPriceElement) {
