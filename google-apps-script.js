@@ -1,6 +1,13 @@
 /**
  * Google Apps Script to receive booking data from Netlify and add it to a Google Sheet
+ * 
+ * IMPORTANT: After deploying this script, store the API_KEY value securely in your Netlify
+ * environment variables and include it in all requests from your client application.
  */
+
+// Replace this with a strong, random string (at least 32 characters)
+// IMPORTANT: After changing this key, you must update the corresponding key in your Netlify environment
+const API_KEY = "EzeSgU6hSC0S1WFFSI0+18W9SvAQrrvEpGgc7Kt4w30=";
 
 function doGet(e) {
   return ContentService.createTextOutput(JSON.stringify({ status: 'error', message: 'GET method not supported' }))
@@ -13,6 +20,15 @@ function doPost(e) {
   try {
     const data = JSON.parse(e.postData.contents);
     Logger.log('Received data: ' + JSON.stringify(data));
+    
+    // Validate API key
+    if (!data.apiKey || data.apiKey !== API_KEY) {
+      Logger.log('Invalid or missing API key');
+      return ContentService.createTextOutput(JSON.stringify({
+        status: 'error',
+        message: 'Unauthorized access: Invalid API key'
+      })).setMimeType(ContentService.MimeType.JSON);
+    }
 
     const ss = SpreadsheetApp.getActiveSpreadsheet();
     const sheet = ss.getSheetByName('Coaching');

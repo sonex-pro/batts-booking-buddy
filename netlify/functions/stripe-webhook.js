@@ -73,7 +73,14 @@ exports.handler = async (event) => {
       // Send data to Google Apps Script
       try {
         console.log('Sending data to Google Apps Script at URL:', process.env.GOOGLE_APPS_SCRIPT_URL);
-        const response = await axios.post(process.env.GOOGLE_APPS_SCRIPT_URL, bookingData);
+        
+        // Add API key to the booking data for secure authentication
+        const secureBookingData = {
+          ...bookingData,
+          apiKey: process.env.GOOGLE_APPS_SCRIPT_API_KEY
+        };
+        
+        const response = await axios.post(process.env.GOOGLE_APPS_SCRIPT_URL, secureBookingData);
         console.log('Response from Google Apps Script:', JSON.stringify(response.data));
       } catch (error) {
         console.error('Error sending data to Google Apps Script:', error.message);
