@@ -9,6 +9,12 @@ build/
 .env
 .env.local
 
+# API keys and sensitive files
+google-apps-script.js
+*.key
+*.pem
+*.secret
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
