@@ -5,14 +5,14 @@ const priceConfig = {
     "Single sessions": 6.00
   },
   "2-Open": {
-    "3 sessions per week": 35.00,
+    "3 sessions per week": 40.00,
     "1 session per week": 25.00,
-    "Single sessions": 8.00
+    "Single sessions": 7.50
   },
   "3-Squad": {
-    "3 sessions per week": 40.00,
-    "1 session per week": 30.00,
-    "Single sessions": 10.00
+    "3 sessions per week": 55.00,
+    "1 session per week": 45.00,
+    "Single sessions": 15.00
   },
   // Also keep the original keys for backward compatibility
   "beginner": {
@@ -21,14 +21,14 @@ const priceConfig = {
     "Single sessions": 6.00
   },
   "intermediate": {
-    "3 sessions per week": 35.00,
+    "3 sessions per week": 40.00,
     "1 session per week": 25.00,
-    "Single sessions": 8.00
+    "Single sessions": 7.50
   },
   "advanced": {
-    "3 sessions per week": 40.00,
-    "1 session per week": 30.00,
-    "Single sessions": 10.00
+    "3 sessions per week": 55.00,
+    "1 session per week": 45.00,
+    "Single sessions": 15.00
   }
 };
 
