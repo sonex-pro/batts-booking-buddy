@@ -45,17 +45,17 @@ async function getSecurePricing(skillLevel, plan, discountCode = '') {
     let price = 0;
     // Handle both formats of skill level
     if (skillLevel === 'beginner' || skillLevel === '1-Under 11') {
-      if (plan === '3 sessions per week') price = 30.00;
-      else if (plan === '1 session per week') price = 20.00;
-      else if (plan === 'Single sessions') price = 6.00;
+      if (plan === '3 sessions per week') price = 45.00;
+      else if (plan === '1 session per week') price = 30.00;
+      else if (plan === 'Single sessions') price = 8.00;
     } else if (skillLevel === 'intermediate' || skillLevel === '2-Open') {
-      if (plan === '3 sessions per week') price = 40.00;
-      else if (plan === '1 session per week') price = 25.00;
-      else if (plan === 'Single sessions') price = 7.50;
+      if (plan === '3 sessions per week') price = 52.00;
+      else if (plan === '1 session per week') price = 38.00;
+      else if (plan === 'Single sessions') price = 10.00;
     } else if (skillLevel === 'advanced' || skillLevel === '3-Squad') {
-      if (plan === '3 sessions per week') price = 55.00;
-      else if (plan === '1 session per week') price = 45.00;
-      else if (plan === 'Single sessions') price = 15.00;
+      if (plan === '3 sessions per week') price = 68.00;
+      else if (plan === '1 session per week') price = 44.00;
+      else if (plan === 'Single sessions') price = 13.00;
     }
     
     let discountAmount = 0;
