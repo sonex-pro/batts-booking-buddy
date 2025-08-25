@@ -7,7 +7,9 @@
 
 // Replace this with a strong, random string (at least 32 characters)
 // IMPORTANT: After changing this key, you must update the corresponding key in your Netlify environment
-const API_KEY = "EzeSgU6hSC0S1WFFSI0+18W9SvAQrrvEpGgc7Kt4w30=";
+// IMPORTANT: Never commit this key to version control
+// This should only exist in your Google Apps Script editor and Netlify environment variables
+const API_KEY = "1p+PWW9FJWZfivngYIHDAPGNvzsJN4JFnGpm1G7NWwk=";
 
 function doGet(e) {
   return ContentService.createTextOutput(JSON.stringify({ status: 'error', message: 'GET method not supported' }))
